@@ -14,3 +14,6 @@ nohup*
 .well-known
 /upload
 node_modules/
+_bmad/
+_bmad-output/
+.agents/
