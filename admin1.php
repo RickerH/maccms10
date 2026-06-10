@@ -8,7 +8,7 @@
 */
 header('Content-Type:text/html;charset=utf-8');
 // 检测PHP环境
-if(version_compare(PHP_VERSION,'5.5.0','<'))  die('PHP版本需要>=5.5，请升级【PHP version requires > = 5.5，please upgrade】');
+if(version_compare(PHP_VERSION,'8.3.0','<'))  die('PHP版本需要>=8.3，请升级【PHP version requires >= 8.3，please upgrade】');
 try {
     //超时时间
     ini_set('max_execution_time', '0');
