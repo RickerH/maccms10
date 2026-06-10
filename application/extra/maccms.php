@@ -40,7 +40,7 @@ return array (
     'site_status' => '1',
     'site_close_tip' => '站点暂时关闭，请稍后访问',
     'mainland_ip_limit' => '0',
-    'new_version' => '',
+    'new_version' => '1',
     'ads_dir' => 'ads',
     'mob_ads_dir' => 'ads',
   ),
@@ -117,7 +117,7 @@ return array (
     'security_csrf_admin_exempt' => 'upload/*',
     'security_csrf_http_code' => '403',
     'api_jwt_enabled' => '0',
-    'api_jwt_secret' => '',
+    'api_jwt_secret' => 'YVSXA863E5FEO6HRR6CVVOI049L8EW75',
     'api_jwt_ttl' => '7200',
     'api_jwt_iss' => 'maccms',
     'admin_audit_enabled' => '0',
@@ -240,7 +240,7 @@ return array (
   'interface' => 
   array (
     'status' => 0,
-    'pass' => 'E4UMURASOGWCLH8C',
+    'pass' => 'YY4NH09K0LFFVBKB',
     'vodtype' => '动作片=动作',
     'arttype' => '头条=头条',
     'actortype' => '',
@@ -409,7 +409,7 @@ return array (
   array (
     'vod' => 
     array (
-      'status' => '1',
+      'status' => 0,
       'charge' => '0',
       'detail_inc_hits' => '1',
       'pagesize' => '20',
@@ -422,7 +422,7 @@ return array (
     ),
     'art' => 
     array (
-      'status' => '1',
+      'status' => 0,
       'charge' => '0',
       'pagesize' => '20',
       'imgurl' => '',
@@ -729,7 +729,7 @@ plotdetail/<id>   => plot/detail',
       'des' => '提供最新的剧情信息',
     ),
   ),
-  'meilisearch' =>
+  'meilisearch' => 
   array (
     'enabled' => '0',
     'host' => 'http://127.0.0.1:7700',
