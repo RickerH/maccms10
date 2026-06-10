@@ -28,10 +28,10 @@ return array (
   ),
   'iva' => 
   array (
-    'status' => '1',
+    'status' => '0',
     'from' => 'iva',
     'show' => 'iva-H5播放器',
-    'des' => 'videojj.com',
+    'des' => '',
     'target' => '_self',
     'ps' => '0',
     'parse' => '',
@@ -90,13 +90,13 @@ return array (
   ),
   'modum3u8' => 
   array (
-    'status' => '1',
+    'status' => '0',
     'from' => 'modum3u8',
     'show' => '魔都云',
     'des' => '',
     'target' => '_self',
-    'ps' => '1',
-    'parse' => 'https://jiexi.moduzyjx.com/?url=',
+    'ps' => '0',
+    'parse' => '',
     'sort' => '8',
     'tip' => '',
   ),

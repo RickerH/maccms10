@@ -798,7 +798,7 @@ function mac_curl_post($url,$data,$heads=array(),$cookie='')
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_HEADER,0);
     curl_setopt($ch, CURLOPT_REFERER, $url);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 
     curl_setopt($ch, CURLOPT_POST, 1);
@@ -830,8 +830,8 @@ function mac_curl_get($url,$heads=array(),$cookie='')
     curl_setopt($ch, CURLOPT_HEADER,0);
     curl_setopt($ch, CURLOPT_REFERER, $url);
     curl_setopt($ch, CURLOPT_POST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
     if(!empty($cookie)){
         curl_setopt($ch, CURLOPT_COOKIE, $cookie);
     }
@@ -3735,5 +3735,4 @@ function mac_strip_tags($string) {
     
     return strip_tags($string);
 }
-
 

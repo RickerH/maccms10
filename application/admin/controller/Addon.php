@@ -85,19 +85,6 @@ class Addon extends Base
         $filter = $this->request->get("filter");
         $search = $this->request->get("search");
         $search = htmlspecialchars(strip_tags($search));
-        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'onlineaddons';
-        $onlineaddons = Cache::get($key);
-        if (!is_array($onlineaddons)) {
-            $onlineaddons = [];
-            $response = mac_curl_get( "h"."t"."t"."p:/"."/a"."p"."i"."."."m"."a"."c"."c"."m"."s."."c"."o"."m"."/" . 'addon/index');
-            $json = !empty($response) ? json_decode($response, true) : [];
-            if (!empty($json['rows'])) {
-                foreach ($json['rows'] as $row) {
-                    $onlineaddons[$row['name']] = $row;
-                }
-            }
-            Cache::set($key, $onlineaddons, 600);
-        }
         $filter = (array)json_decode($filter, true);
         $addons = get_addon_list();
         $list = [];
@@ -105,30 +92,26 @@ class Addon extends Base
             if ($search && stripos($v['name'], $search) === FALSE && stripos($v['intro'], $search) === FALSE)
                 continue;
 
-            if (isset($onlineaddons[$v['name']])) {
-                $v = array_merge($onlineaddons[$v['name']], $v);
-            } else {
-                if(!isset($v['category_id'])) {
-                    $v['category_id'] = 0;
-                }
-                if(!isset($v['flag'])) {
-                    $v['flag'] = '';
-                }
-                if(!isset($v['banner'])) {
-                    $v['banner'] = '';
-                }
-                if(!isset($v['image'])) {
-                    $v['image'] = '';
-                }
-                if(!isset($v['donateimage'])) {
-                    $v['donateimage'] = '';
-                }
-                if(!isset($v['demourl'])) {
-                    $v['demourl'] = '';
-                }
-                if(!isset($v['price'])) {
-                    $v['price'] = '0.00';
-                }
+            if(!isset($v['category_id'])) {
+                $v['category_id'] = 0;
+            }
+            if(!isset($v['flag'])) {
+                $v['flag'] = '';
+            }
+            if(!isset($v['banner'])) {
+                $v['banner'] = '';
+            }
+            if(!isset($v['image'])) {
+                $v['image'] = '';
+            }
+            if(!isset($v['donateimage'])) {
+                $v['donateimage'] = '';
+            }
+            if(!isset($v['demourl'])) {
+                $v['demourl'] = '';
+            }
+            if(!isset($v['price'])) {
+                $v['price'] = '0.00';
             }
             $v['url'] = addon_url($v['name']);
             $v['createtime'] = filemtime(ADDON_PATH . $v['name']);
@@ -153,33 +136,7 @@ class Addon extends Base
      */
     public function install()
     {
-        $param = input();
-        $name = $param['name'];
-        $force = (int)$param['force'];
-        if (!$name) {
-            return $this->error(lang('param_err'));
-        }
-        try {
-            $uid = $this->request->post("uid");
-            $token = $this->request->post("token");
-            $version = $this->request->post("version");
-            $faversion = $this->request->post("faversion");
-            $extend = [
-                'uid'       => $uid,
-                'token'     => $token,
-                'version'   => $version,
-                'faversion' => $faversion
-            ];
-            Service::install($name, $force, $extend);
-            $info = get_addon_info($name);
-            $info['config'] = get_addon_config($name) ? 1 : 0;
-            $info['state'] = 1;
-            return $this->success(lang('install_err'));
-        } catch (AddonException $e) {
-            return $this->result($e->getData(), $e->getCode(), $e->getMessage());
-        } catch (Exception $e) {
-            return $this->error($e->getMessage(), $e->getCode());
-        }
+        return $this->error('远程插件安装已禁用，请通过 Git 部署插件代码');
     }
 
     /**
@@ -317,37 +274,14 @@ class Addon extends Base
 
     public function add()
     {
-        return $this->fetch('admin@addon/add');
+        return $this->error('远程插件安装已禁用，请通过 Git 部署插件代码');
     }
     /**
      * 更新插件
      */
     public function upgrade()
     {
-        $name = $this->request->post("name");
-        if (!$name) {
-            return $this->error(lang('param_err'));
-        }
-        try {
-            $uid = $this->request->post("uid");
-            $token = $this->request->post("token");
-            $version = $this->request->post("version");
-            $faversion = $this->request->post("faversion");
-            $extend = [
-                'uid'       => $uid,
-                'token'     => $token,
-                'version'   => $version,
-                'faversion' => $faversion
-            ];
-            //调用更新的方法
-            Service::upgrade($name, $extend);
-            Cache::rm('__menu__');
-            return $this->success(lang('update_ok'));
-        } catch (AddonException $e) {
-            return $this->result($e->getData(), $e->getCode(), $e->getMessage());
-        } catch (Exception $e) {
-            return $this->error($e->getMessage());
-        }
+        return $this->error('远程插件升级已禁用，请通过 Git 部署插件代码');
     }
 
 }
