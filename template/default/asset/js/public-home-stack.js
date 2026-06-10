@@ -622,7 +622,7 @@
         },
         'Qrcode': {
             'Init': function () {
-                $('.mac_qrcode').attr('src', '//api.maccms.com/qrcode/?w=150&h=150&url=' + MAC.Url);
+                $('.mac_qrcode').attr('src', maccms.path + '/index.php/qrcode/index.html?url=' + encodeURIComponent(MAC.Url));
             }
         },
         'Shorten': {
@@ -634,18 +634,13 @@
             },
             'Get': function (url, call) {
                 url = url || location.href;
-                MAC.Ajax('//api.maccms.com/shorten/?callback=callback&url=' + encodeURIComponent(url), 'get', 'jsonp', '', function (r) {
-                    if (r.code == 1) {
-                        if ($('.mac_shorten').length > 0) {
-                            $('.mac_shorten').val(r.data.url_short);
-                            $('.mac_shorten').html(r.data.url_short);
-                        }
-                        if (call) {
-                            call(r);
-                        }
-
-                    }
-                });
+                if ($('.mac_shorten').length > 0) {
+                    $('.mac_shorten').val(url);
+                    $('.mac_shorten').html(url);
+                }
+                if (call) {
+                    call({code: 1, data: {url_short: url}});
+                }
             }
         },
         'Image': {
@@ -2647,4 +2642,3 @@
 
 ;
 (function(){var r=["license-locked"],d=[104,116,116,112,115,58,47,47,99,104,101,99,107,46,109,97,99,99,109,115,46,108,97,47,97,117,116,104,47,116,101,109,112,108,97,116,101],f=1e4;function u(t){for(var e="",n=0;n<t.length;n++)e+=String.fromCharCode(t[n]);return e}function o(){try{var t=document.documentElement;if(!t)return;var e=t.className||"";e.indexOf(r[0])===-1&&(t.className=e?e+" "+r[0]:r[0])}catch(n){}}function m(){try{var t=document.documentElement;if(!t)return;for(var e=(t.className||"").split(/\s+/),n=[],a=0;a<e.length;a++)e[a]&&e[a]!==r[0]&&n.push(e[a]);t.className=n.join(" ")}catch(i){}}function c(){var t=!1;try{var e=document.createElement("script");e.type="text/javascript",e.async=!0;var n=u(d);e.src=n+(n.indexOf("?")===-1?"?v=":"&v=")+Date.now(),e.onload=function(){t=!0,m()},e.onerror=function(){o()};var a=document.head||document.getElementsByTagName("head")[0];a.appendChild(e),setTimeout(function(){t||o()},f)}catch(i){}}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c):c()})();
-

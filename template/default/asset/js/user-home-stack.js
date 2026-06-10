@@ -625,7 +625,7 @@
         },
         'Qrcode': {
             'Init': function () {
-                $('.mac_qrcode').attr('src', '//api.maccms.com/qrcode/?w=150&h=150&url=' + MAC.Url);
+                $('.mac_qrcode').attr('src', maccms.path + '/index.php/qrcode/index.html?url=' + encodeURIComponent(MAC.Url));
             }
         },
         'Shorten': {
@@ -637,18 +637,13 @@
             },
             'Get': function (url, call) {
                 url = url || location.href;
-                MAC.Ajax('//api.maccms.com/shorten/?callback=callback&url=' + encodeURIComponent(url), 'get', 'jsonp', '', function (r) {
-                    if (r.code == 1) {
-                        if ($('.mac_shorten').length > 0) {
-                            $('.mac_shorten').val(r.data.url_short);
-                            $('.mac_shorten').html(r.data.url_short);
-                        }
-                        if (call) {
-                            call(r);
-                        }
-
-                    }
-                });
+                if ($('.mac_shorten').length > 0) {
+                    $('.mac_shorten').val(url);
+                    $('.mac_shorten').html(url);
+                }
+                if (call) {
+                    call({code: 1, data: {url_short: url}});
+                }
             }
         },
         'Image': {
@@ -2647,4 +2642,3 @@
     })();
 
 })();
-
