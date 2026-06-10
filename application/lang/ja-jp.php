@@ -862,8 +862,6 @@ https://www.baidu.com/123.jpg
   'admin/index/welcome/filed_date' => 'サーバーの日付',
   'admin/index/welcome/filed_ver' => 'プログラムバージョン',
   'admin/index/welcome/filed_license' => 'ライセンスの種類',
-  'admin/index/welcome/tip_update_db' => 'データベース更新プロンプト',
-  'admin/index/welcome/tip_update_db_txt' => 'ヒント：ローカルにデータベースアップグレードスクリプトが見つかりましたか？アップグレード操作を実行しますか！実行が完了すると、スクリプトは自動的に削除されます！',
   'admin/index/welcome/system_info_guide' => '
         <div class="text-sm">
             <p class="font-bold">ダッシュボードシステムステータス表示ガイド</p>
@@ -890,7 +888,6 @@ https://www.baidu.com/123.jpg
             </div>
         </div>
     ',
-  'admin/index/welcome/tip_update_go' => '【データベースアップグレードスクリプトに移動するには、ここをクリックしてください】',
   'admin/index/welcome/filed_login_num' => 'ログイン回数',
   'admin/index/welcome/filed_last_login_ip' => '前回のログインIP',
   'admin/index/welcome/filed_last_login_time' => '前回のログイン時間',
@@ -2089,22 +2086,6 @@ https://www.baidu.com/123.jpg
   'admin/type/extend_director' => '拡張監督',
   'admin/type/extend_star' => '拡張俳優',
   'admin/ulog/title' => 'ログ管理',
-  'admin/update/step1_a' => 'オンラインアップグレードの最初のステップ【ファイルアップグレード】が進行中です。しばらくお待ちください......',
-  'admin/update/step1_b' => 'アップグレードファイルパッケージをダウンロードしています...',
-  'admin/update/download_err' => 'アップグレードパッケージのダウンロードに失敗しました。もう一度やり直してください...',
-  'admin/update/download_ok' => 'アップグレードパッケージのダウンロードが完了しました...',
-  'admin/update/sha1_ok' => 'ファイル整合性チェックに合格しました...',
-  'admin/update/sha1_err' => 'ファイル整合性チェックに失敗しました。パッケージが改ざんされている可能性があります。更新を中止しました',
-  'admin/update/core_file_error' => 'システムコア機能に異常があります。ファイルを復元してください',
-  'admin/update/upgrade_package_processed' => 'アップグレードパッケージのファイルを処理しています...',
-  'admin/update/upgrade_err' => 'アップグレードに失敗しました。システムディレクトリとファイルの権限を確認してください！...',
-  'admin/update/step2_a' => 'オンラインアップグレードの2番目のステップ【データアップグレード】が進行中です。しばらくお待ちください......',
-  'admin/update/upgrade_sql' => 'データベースアップグレードスクリプトファイルが見つかりました。処理しています...',
-  'admin/update/no_sql' => 'データベースアップグレードスクリプトが見つかりませんでした。しばらくしてからデータキャッシュの更新部分に進みます...',
-  'admin/update/step3_a' => 'オンラインアップグレードの3番目のステップ【キャッシュの更新】が進行中です。しばらくお待ちください......',
-  'admin/update/update_cache' => 'データキャッシュファイルを更新しています...',
-  'admin/update/upgrade_complete' => 'おめでとうございます。システムのアップグレードが完了しました...',
-  'admin/update/not_delete' => 'データベースアップグレードスクリプトが削除されていません。手動で削除してください',
   'admin/upload/test_write_ok' => '書き込みに失敗しました。一時ファイルディレクトリの権限を確認してください',
   'admin/upload/not_find_extend' => 'サードパーティの拡張アップロードライブラリが見つかりませんでした',
   'admin/upload/no_input_file' => 'アップロードされたファイルが見つかりません（理由：フォーム名が間違っている可能性があります。デフォルトのフォーム名は「file」または「imgdata」です）！',

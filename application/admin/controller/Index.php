@@ -108,7 +108,6 @@ class Index extends Base
     public function welcome()
     {
         $version = config('version');
-        $update_sql = file_exists('./application/data/update/database.php');
 
         $this->assign('spider_data', $this->botlist());
         $os_data = $this->get_system_status();
@@ -130,7 +129,6 @@ class Index extends Base
         $this->assign('show_os_guide', $show_os_guide);
         $this->assign('os_data', $os_data);
         $this->assign('version', $version);
-        $this->assign('update_sql', $update_sql);
         $this->assign('mac_lang', config('default_lang'));
         $this->assign('dashboard_data', $this->getAdminDashboardData());
 

@@ -862,8 +862,6 @@ https://www.baidu.com/123.jpg
   'admin/index/welcome/filed_date' => 'Fecha del servidor',
   'admin/index/welcome/filed_ver' => 'Versión del programa',
   'admin/index/welcome/filed_license' => 'Tipo de licencia',
-  'admin/index/welcome/tip_update_db' => 'Aviso de actualización de base de datos',
-  'admin/index/welcome/tip_update_db_txt' => 'Aviso: ¿Se ha encontrado un script de actualización de base de datos local? ¿Desea ejecutar la operación de actualización? ¡El script se eliminará automáticamente después de la ejecución!',
   'admin/index/welcome/system_info_guide' => '
         <div class="text-sm">
             <p class="font-bold">Guía de Visualización del Estado del Sistema en el Panel de Control</p>
@@ -890,7 +888,6 @@ https://www.baidu.com/123.jpg
             </div>
         </div>
     ',
-  'admin/index/welcome/tip_update_go' => '【Haga clic para ejecutar el script de actualización de la base de datos】',
   'admin/index/welcome/filed_login_num' => 'Número de inicio de sesión',
   'admin/index/welcome/filed_last_login_ip' => 'Última IP de inicio de sesión',
   'admin/index/welcome/filed_last_login_time' => 'Última hora de inicio de sesión',
@@ -2091,22 +2088,6 @@ Nota: Si se especifican listas negras y blancas, ambas se aplicarán simultánea
   'admin/type/extend_director' => 'Director Extendido',
   'admin/type/extend_star' => 'Actores Extendidos',
   'admin/ulog/title' => 'Gestión de Registros de Acceso',
-  'admin/update/step1_a' => 'Paso 1 en curso de actualización en línea [Actualización de Archivos], por favor espere...',
-  'admin/update/step1_b' => 'Descargando paquete de actualización...',
-  'admin/update/download_err' => 'Error al descargar el paquete de actualización. Por favor inténtelo de nuevo...',
-  'admin/update/download_ok' => 'Descarga del paquete de actualización completa...',
-  'admin/update/sha1_ok' => 'Verificación de integridad del archivo aprobada...',
-  'admin/update/sha1_err' => 'Verificación de integridad fallida, el paquete puede haber sido alterado, actualización cancelada',
-  'admin/update/core_file_error' => 'Error en la función principal del sistema, por favor restaure el archivo',
-  'admin/update/upgrade_package_processed' => 'Procesando archivos del paquete de actualización...',
-  'admin/update/upgrade_err' => 'Error en la actualización. Por favor verifique los permisos de directorio y archivos del sistema...',
-  'admin/update/step2_a' => 'Paso 2 en curso de actualización en línea [Actualización de Datos], por favor espere...',
-  'admin/update/upgrade_sql' => 'Se encontraron scripts de actualización de base de datos. Procesando...',
-  'admin/update/no_sql' => 'No se encontraron scripts de actualización de base de datos. Procediendo a actualizar la caché de datos...',
-  'admin/update/step3_a' => 'Paso 3 en curso de actualización en línea [Actualización de Caché], por favor espere...',
-  'admin/update/update_cache' => 'Actualizando archivos de caché de datos...',
-  'admin/update/upgrade_complete' => '¡Felicitaciones! La actualización del sistema ha finalizado...',
-  'admin/update/not_delete' => 'El script de actualización de la base de datos no se eliminó, elimínelo manualmente',
   'admin/upload/test_write_ok' => 'Error al escribir. Por favor verifique los permisos del directorio temporal',
   'admin/upload/not_find_extend' => 'No se encontró la biblioteca de carga de extensiones de terceros',
   'admin/upload/no_input_file' => 'No se encontró el archivo cargado (razón: nombre del formulario incorrecto, el nombre de formulario predeterminado es "file" o "imgdata")!',

@@ -26,7 +26,7 @@ This folder powers the **admin assistant** (floating `?`). Answers should cite t
 | `18-database-tools.md` | 数据库管理、SQL、替换、挂马检测 |
 | `19-collect-modules.md` | 自定义接口、规则、推荐资源、挂机 |
 | `20-template-ads-wizard.md` | 模板、广告位、标签向导 |
-| `21-safety-urlsend-addon.md` | 安全检测、URL 推送、应用市场、升级 |
+| `21-safety-urlsend-addon.md` | 安全检测、URL 推送、应用市场 |
 | `22-maccms-php-config.md` | `maccms.php` 结构（site/app/user/…） |
 | `23-directories-and-runtime.md` | 目录、缓存、备份路径 |
 

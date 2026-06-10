@@ -316,7 +316,6 @@ class Index extends Controller
             ['file', './application/route.php', lang('install/read_and_write'), lang('install/read_and_write'), 'ok'],
             ['dir', './application/extra', lang('install/read_and_write'), lang('install/read_and_write'), 'ok'],
             ['dir', './application/data/backup', lang('install/read_and_write'), lang('install/read_and_write'), 'ok'],
-            ['dir', './application/data/update', lang('install/read_and_write'), lang('install/read_and_write'), 'ok'],
             ['dir', './runtime', lang('install/read_and_write'), lang('install/read_and_write'), 'ok'],
             ['dir', './upload', lang('install/read_and_write'), lang('install/read_and_write'), 'ok'],
         ];

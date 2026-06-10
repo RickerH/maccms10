@@ -862,8 +862,6 @@ https://www.baidu.com/123.jpg
   'admin/index/welcome/filed_date' => 'Data do servidor',
   'admin/index/welcome/filed_ver' => 'Versão do programa',
   'admin/index/welcome/filed_license' => 'Tipo de licença',
-  'admin/index/welcome/tip_update_db' => 'Dicas de atualização do banco de dados',
-  'admin/index/welcome/tip_update_db_txt' => 'Dica, um script de atualização do banco de dados foi encontrado localmente? Executar a operação de atualização? O script será excluído automaticamente após a conclusão!',
   'admin/index/welcome/system_info_guide' => '
         <div class="text-sm">
             <p class="font-bold">Guia de Exibição do Status do Sistema no Painel</p>
@@ -890,7 +888,6 @@ https://www.baidu.com/123.jpg
             </div>
         </div>
     ',
-  'admin/index/welcome/tip_update_go' => '【Clique para entrar no script de atualização do banco de dados】',
   'admin/index/welcome/filed_login_num' => 'Número de logins',
   'admin/index/welcome/filed_last_login_ip' => 'Último IP de login',
   'admin/index/welcome/filed_last_login_time' => 'Último tempo de login',
@@ -2093,22 +2090,6 @@ https://www.baidu.com/123.jpg
   'admin/type/extend_director' => 'Diretor estendido',
   'admin/type/extend_star' => 'Ator estendido',
   'admin/ulog/title' => 'Gerenciamento de logs',
-  'admin/update/step1_a' => 'Atualização online em andamento, primeiro passo [atualização de arquivo], aguarde...',
-  'admin/update/step1_b' => 'Baixando pacote de arquivos de atualização...',
-  'admin/update/download_err' => 'Falha ao baixar o pacote de atualização, tente novamente...',
-  'admin/update/download_ok' => 'Download do pacote de atualização concluído...',
-  'admin/update/sha1_ok' => 'Verificação de integridade do ficheiro aprovada...',
-  'admin/update/sha1_err' => 'Verificação de integridade falhou, o pacote pode ter sido adulterado, atualização cancelada',
-  'admin/update/core_file_error' => 'Erro na função principal do sistema, por favor restaure o arquivo',
-  'admin/update/upgrade_package_processed' => 'Processando arquivos do pacote de atualização...',
-  'admin/update/upgrade_err' => 'Falha na atualização, verifique as permissões do diretório e dos arquivos do sistema!...',
-  'admin/update/step2_a' => 'Atualização online em andamento, segundo passo [atualização de dados], aguarde...',
-  'admin/update/upgrade_sql' => 'Arquivo de script de atualização do banco de dados encontrado, processando...',
-  'admin/update/no_sql' => 'Nenhum script de atualização do banco de dados encontrado, entrando na parte de atualização do cache de dados mais tarde...',
-  'admin/update/step3_a' => 'Atualização online em andamento, terceiro passo [atualização de cache], aguarde...',
-  'admin/update/update_cache' => 'Atualizando arquivos de cache de dados...',
-  'admin/update/upgrade_complete' => 'Parabéns, a atualização do sistema foi concluída...',
-  'admin/update/not_delete' => 'Script de atualização do banco de dados não excluído, exclua manualmente',
   'admin/upload/test_write_ok' => 'Falha na gravação, verifique as permissões do diretório de arquivos temporários',
   'admin/upload/not_find_extend' => 'Biblioteca de classes de upload de extensão de terceiros não encontrada',
   'admin/upload/no_input_file' => 'Arquivo carregado não encontrado (motivo: o nome do formulário pode estar incorreto, o nome padrão do formulário é "file" ou "imgdata")!',

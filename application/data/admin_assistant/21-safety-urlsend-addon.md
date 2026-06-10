@@ -1,4 +1,4 @@
-# 安全检测、URL推送、应用市场、在线升级
+# 安全检测、URL推送、应用市场
 
 ## 文件安全检测 (`安全 → 文件安全检测` / `menu/safety_file`)
 
@@ -28,14 +28,6 @@
 
 ---
 
-## 在线升级 (`Update` 控制器 / 欢迎页入口)
-
-- **检查文件完整性**（`Base` 对 `Update.php` 有校验逻辑）。  
-- 升级前：**全站备份**。  
-- FTP/权限不足会导致 **升级半截**；需在服务器修权限后重试。
-
----
-
 ## English summary
 
-**Safety** scans files/DB for injections—verify hits manually. **URL push** helps indexing. **Addons** change DB & code—test in staging first. **Updater** needs write perms and backups.
+**Safety** scans files/DB for injections—verify hits manually. **URL push** helps indexing. **Addons** change DB & code—test in staging first.

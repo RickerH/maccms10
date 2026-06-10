@@ -1,5 +1,4 @@
 {include file="../../../application/admin/view_new/public/head" /}
-<link rel="stylesheet" href="__STATIC__/css/update.css">
 <style type="text/css">
     .hs-iframe {
         width: 100%;
@@ -170,12 +169,6 @@
             {:lang('admin/index/index/name')}
         </div>
         <ul class="layout-right" lay-filter="">
-            <li class="nav-item" id="update-notification" style="display: none;">
-                <a href="javascript:;" onclick="showUpdateDialog()" title="有新版本可用">
-                    <i class="layui-icon layui-icon-refresh-1"></i>
-                    <span>更新</span>
-                </a>
-            </li>
             <li class="nav-item">
                 <a href="__ROOT__/" target="_blank"><i class="layui-icon layui-icon-home"></i></a>
             </li>
@@ -298,12 +291,6 @@
             </ul>
             <div class="bottom-nav">
                 <ul class="layui-nav layui-layout-right layui-form bottom-nav-toolbar" lay-filter="demo">
-                    <li class="nav-item" id="update-notification"  style="display: none;">
-                        <a href="javascript:;" onclick="showUpdateDialog()" title="有新版本可用">
-                            <i class="layui-icon layui-icon-refresh-2"></i>
-                            <span>更新</span>
-                        </a>
-                    </li>
                     <li class="layui-nav-item" >
                         <a href="javascript:;">{:lang('admin/index/index/menu_opt')}</a>
                         <dl class="layui-nav-child">
@@ -483,46 +470,6 @@
     layui.use(['element', 'layer', 'form'], function () {
         var $ = layui.jquery, element = layui.element, form = layui.form;
         layer = layui.layer;
-        console.log("MAC_VERSION", MAC_VERSION)
-        if (typeof (MAC_VERSION) != 'undefined' && typeof (PHP_VERSION) != 'undefined' && typeof (THINK_VERSION) != 'undefined') {
-            $.ajax({
-                url: `https://update.maccms.la/v10/?c=check&v=${MAC_VERSION}&p=${PHP_VERSION}&tp=${THINK_VERSION}&t=${Math.random()}`,
-                type: 'GET',
-                dataType: 'text', // 确保返回的数据被视为纯文本
-                success: function (response) {
-                    // 使用正则表达式提取update_content
-                    // var updateContentRegex = /var update_content = \[((?:.|\n)*?)\].join\('<br>\');/g;
-                    var updateContentMatch = response.match(/var update_content\s*=\s*\[(.*?)\]\.join\('<br>'\);/s);
-                    console.log("updateContentMatch", updateContentMatch)
-                    if (updateContentMatch) {
-                        try {
-                            eval(updateContentMatch[0]);
-                        } catch (e) {
-                            console.error('update content eval failed', e);
-                        }
-                    }
-
-                    // 使用正则表达式提取new_v
-                    var newVRegex = /var new_v = '(.*?)';/;
-                    var newVMatch = response.match(newVRegex);
-                    var newV = newVMatch ? newVMatch[1] : '未找到new_v';
-                    if (newV > MAC_VERSION) {
-                        // 存储更新信息到全局变量，供showUpdateDialog函数使用
-                        window.updateInfo = {
-                            newV: newV,
-                            update_content: update_content,
-                            package: 'maccms10_update'
-                        };
-                        // 显示更新按钮而不是直接弹窗（在两个位置都显示）
-                        $('.layout-right #update-notification').show().addClass('show');
-                        $('.bottom-nav #update-notification').show().addClass('show');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('AJAX请求失败:', error);
-                }
-            });
-        }
         // layer.msg('提示信息', { time: 180000 });
         element.init('nav', 'demo');
         form.render('select', { render: true });
@@ -746,64 +693,6 @@
         });
     }
 
-    // 显示更新对话框的函数
-    function showUpdateDialog() {
-        if (!window.updateInfo) {
-            layer.msg('没有可用的更新信息', { time: 2000 });
-            return;
-        }
-
-        var newV = window.updateInfo.newV;
-        var update_content = window.updateInfo.update_content;
-        var package = window.updateInfo.package;
-
-        // js 判断是否移动端
-        var area = ['460px', '638px']
-        var agent = navigator.userAgent.toLowerCase();
-        var isMobile = /android|iphone|ipod|ipad|ios/.test(agent)
-        if (isMobile) {
-            area = ['95%', '638px']
-        }
-
-        layer.open({
-            type: 1,
-            area, // 宽高
-            title: false, // 不显示标题栏
-            closeBtn: 0,
-            btn: ['关闭'],
-            btnAlign: 'c',
-            shadeClose: true, // 点击遮罩关闭层
-            skin: 'skin_updae_from', // 加上边框
-            content: `
-                <div class="updae_from">
-                    <img class="update_bg" src="__STATIC__/images/upgrade_pop_rocket_bg@2x.png" alt="" srcset="">
-                    <div class="update_content">
-                    <div class="update_title">
-                        <p>更新提示</p>
-                        <p>${newV}>>></p>
-                    </div>
-                    <a class="group_link" target="_blank" href="https://t.me/maccms_channel">Telegram群   https://t.me/maccms_channel</a>
-                    <a class="group_link" target="_blank"
-                        href="https://github.com/magicblack">Github源码   https://github.com/magicblack</a>
-                    <div class="flex-col flex my-[20px] gap-1">
-                        <a class="j-iframe text-[#53D19C]" title="点击进入升级"
-                        data-href="${ADMIN_PATH}/admin/update/step1.html?file=${package}">
-                        【点击进入在线升级】
-                        </a>
-                        <a href="https://github.com/magicblack/maccms_down/raw/master/maccms10_update.zip">
-                        【下载离线升级包线路1】
-                        </a>
-                        <a href="https://cdn.jsdelivr.net/gh/magicblack/maccms_down@master/maccms10_update.zip">
-                        【下载离线升级包线路2】
-                        </a>
-                    </div>
-                    <div class="update_list">
-                        ${update_content}
-                    </div>
-                </div>
-            `
-        });
-    }
 </script>
 
 </body>

@@ -862,7 +862,6 @@ https://www.baidu.com/123.jpg
   'admin/index/welcome/filed_date' => '서버 날짜',
   'admin/index/welcome/filed_ver' => '프로그램 버전',
   'admin/index/welcome/filed_license' => '라이선스 유형',
-  'admin/index/welcome/tip_update_db' => '데이터베이스 업데이트 팁',
   'admin/index/welcome/system_info_guide' => '
         <div class="text-sm">
             <p class="font-bold">대시보드 시스템 상태 표시 가이드</p>
@@ -889,8 +888,6 @@ https://www.baidu.com/123.jpg
             </div>
         </div>
     ',
-  'admin/index/welcome/tip_update_db_txt' => '팁: 로컬에 데이터베이스 업그레이드 스크립트가 있는 것으로 감지되었습니다. 업그레이드 작업을 실행하시겠습니까? 실행이 완료되면 스크립트가 자동으로 삭제됩니다!',
-  'admin/index/welcome/tip_update_go' => '【데이터베이스 업그레이드 스크립트 업그레이드로 이동하려면 클릭】',
   'admin/index/welcome/filed_login_num' => '로그인 횟수',
   'admin/index/welcome/filed_last_login_ip' => '마지막 로그인 IP',
   'admin/index/welcome/filed_last_login_time' => '마지막 로그인 시간',
@@ -2087,22 +2084,6 @@ https://www.baidu.com/123.jpg
   'admin/type/extend_director' => '확장 감독',
   'admin/type/extend_star' => '확장 배우',
   'admin/ulog/title' => '로그 관리',
-  'admin/update/step1_a' => '온라인 업그레이드 중 첫 번째 단계 [파일 업그레이드], 잠시 기다려 주십시오...',
-  'admin/update/step1_b' => '업그레이드 파일 패키지를 다운로드하는 중...',
-  'admin/update/download_err' => '업그레이드 패키지 다운로드 실패, 다시 시도하십시오...',
-  'admin/update/download_ok' => '업그레이드 패키지 다운로드 완료...',
-  'admin/update/sha1_ok' => '파일 무결성 검사 통과...',
-  'admin/update/sha1_err' => '파일 무결성 검사 실패, 패키지가 변조되었을 수 있습니다. 업데이트가 중단되었습니다',
-  'admin/update/core_file_error' => '시스템 핵심 기능 오류, 파일을 복원해 주세요',
-  'admin/update/upgrade_package_processed' => '업그레이드 패키지 파일을 처리하는 중...',
-  'admin/update/upgrade_err' => '업그레이드 실패, 시스템 디렉토리 및 파일 권한을 확인하십시오!...',
-  'admin/update/step2_a' => '온라인 업그레이드 중 두 번째 단계 [데이터 업그레이드], 잠시 기다려 주십시오...',
-  'admin/update/upgrade_sql' => '데이터베이스 업그레이드 스크립트 파일이 감지되었습니다. 처리 중...',
-  'admin/update/no_sql' => '데이터베이스 업그레이드 스크립트가 감지되지 않았습니다. 잠시 후 데이터 캐시 업데이트 부분으로 이동합니다...',
-  'admin/update/step3_a' => '온라인 업그레이드 중 세 번째 단계 [캐시 업데이트], 잠시 기다려 주십시오...',
-  'admin/update/update_cache' => '데이터 캐시 파일을 업데이트하는 중...',
-  'admin/update/upgrade_complete' => '축하합니다. 시스템 업그레이드가 완료되었습니다...',
-  'admin/update/not_delete' => '데이터베이스 업그레이드 스크립트가 삭제되지 않았습니다. 수동으로 삭제하십시오',
   'admin/upload/test_write_ok' => '쓰기 실패, 임시 파일 디렉토리 권한을 확인하십시오.',
   'admin/upload/not_find_extend' => '타사 확장 업로드 라이브러리를 찾을 수 없습니다.',
   'admin/upload/no_input_file' => '업로드된 파일을 찾을 수 없습니다(이유: 양식 이름이 잘못되었을 수 있습니다. 기본 양식 이름은 "file" 또는 "imgdata"입니다)!',

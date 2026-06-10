@@ -935,8 +935,6 @@ https://www.baidu.com/123.jpg
     'admin/index/welcome/filed_date' =>'服务器日期',
     'admin/index/welcome/filed_ver' =>'程序版本',
     'admin/index/welcome/filed_license' =>'授权类型',
-    'admin/index/welcome/tip_update_db' =>'数据库更新提示',
-    'admin/index/welcome/tip_update_db_txt' =>'提示，发现本地有数据库升级脚本？是否执行升级操作！执行完毕后将自动删除脚本！',
     'admin/index/welcome/system_info_guide' => '
         <div class="text-sm">
             <p class="font-bold">仪表盘系统状态显示指南</p>
@@ -963,7 +961,6 @@ https://www.baidu.com/123.jpg
             </div>
         </div>
     ',
-    'admin/index/welcome/tip_update_go'=>'【点击进升级数据库脚本】',
     'admin/index/welcome/filed_login_num' =>'登录次数',
     'admin/index/welcome/filed_last_login_ip' =>'上次登录IP',
     'admin/index/welcome/filed_last_login_time' =>'上次登录时间',
@@ -2484,22 +2481,6 @@ https://www.baidu.com/123.jpg
 
     'admin/ulog/title'=>'日志管理',
 
-    'admin/update/step1_a'=>'在线升级进行中第一步【文件升级】,请稍后......',
-    'admin/update/step1_b'=>'正在下载升级文件包...',
-    'admin/update/download_err'=>'下载升级包失败，请重试...',
-    'admin/update/download_ok'=>'下载升级包完毕...',
-    'admin/update/sha1_ok'=>'文件校验通过...',
-    'admin/update/sha1_err'=>'文件校验失败，升级包可能被篡改，已终止更新',
-    'admin/update/core_file_error'=>'系统核心功能异常，请恢复文件',
-    'admin/update/upgrade_package_processed'=>'正在处理升级包的文件...',
-    'admin/update/upgrade_err'=>'升级失败，请检查系统目录及文件权限！...',
-    'admin/update/step2_a'=>'在线升级进行中第二步【数据升级】,请稍后......',
-    'admin/update/upgrade_sql'=>'发现数据库升级脚本文件，正在处理...',
-    'admin/update/no_sql'=>'未发现数据库升级脚本，稍后进入更新数据缓存部分...',
-    'admin/update/step3_a'=>'在线升级进行中第三步【更新缓存】,请稍后......',
-    'admin/update/update_cache'=>'更新数据缓存文件...',
-    'admin/update/upgrade_complete'=>'恭喜您，系统升级完毕...',
-    'admin/update/not_delete'=>'数据库升级脚本未删除，请手动删除',
 
     'admin/upload/test_write_ok'=>'测试写入成功',
     'admin/upload/test_write_ok'=>'写入失败，请检查临时文件目录权限',

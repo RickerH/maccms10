@@ -863,7 +863,6 @@ https://www.baidu.com/123.jpg
   'admin/index/welcome/filed_date' => '服務器日期',
   'admin/index/welcome/filed_ver' => '程序版本',
   'admin/index/welcome/filed_license' => '授權類型',
-  'admin/index/welcome/tip_update_db' => '數據庫更新提示',
   'admin/index/welcome/system_info_guide' => '
         <div class="text-sm">
             <p class="font-bold">儀表板系統狀態顯示指南</p>
@@ -890,8 +889,6 @@ https://www.baidu.com/123.jpg
             </div>
         </div>
     ',
-  'admin/index/welcome/tip_update_db_txt' => '提示，發現本地有數據庫升級腳本？是否執行升級操作！執行完畢後將自動刪除腳本！',
-  'admin/index/welcome/tip_update_go' => '【點擊進升級數據庫腳本】',
   'admin/index/welcome/filed_login_num' => '登錄次數',
   'admin/index/welcome/filed_last_login_ip' => '上次登錄IP',
   'admin/index/welcome/filed_last_login_time' => '上次登錄時間',
@@ -2089,22 +2086,6 @@ https://www.baidu.com/123.jpg
   'admin/type/extend_director' => '擴展導演',
   'admin/type/extend_star' => '擴展演員',
   'admin/ulog/title' => '日誌管理',
-  'admin/update/step1_a' => '在線升級進行中第一步【文件升級】,請稍後......',
-  'admin/update/step1_b' => '正在下載升級文件包...',
-  'admin/update/download_err' => '下載升級包失敗，請重試...',
-  'admin/update/download_ok' => '下載升級包完畢...',
-  'admin/update/sha1_ok' => '檔案校驗通過...',
-  'admin/update/sha1_err' => '檔案校驗失敗，升級包可能被竄改，已終止更新',
-  'admin/update/core_file_error' => '系統核心功能異常，請恢復檔案',
-  'admin/update/upgrade_package_processed' => '正在處理升級包的文件...',
-  'admin/update/upgrade_err' => '升級失敗，請檢查系統目錄及文件權限！...',
-  'admin/update/step2_a' => '在線升級進行中第二步【數據升級】,請稍後......',
-  'admin/update/upgrade_sql' => '發現數據庫升級腳本文件，正在處理...',
-  'admin/update/no_sql' => '未發現數據庫升級腳本，稍後進入更新數據緩存部分...',
-  'admin/update/step3_a' => '在線升級進行中第三步【更新緩存】,請稍後......',
-  'admin/update/update_cache' => '更新數據緩存文件...',
-  'admin/update/upgrade_complete' => '恭喜您，系統升級完畢...',
-  'admin/update/not_delete' => '資料庫升級腳本未刪除，請手動刪除',
   'admin/upload/test_write_ok' => '寫入失敗，請檢查臨時文件目錄權限',
   'admin/upload/not_find_extend' => '未找到第三方擴展上傳類庫',
   'admin/upload/no_input_file' => '未找到上傳的文件(原因：表單名可能錯誤，默認表單名"file"或"imgdata")！',
