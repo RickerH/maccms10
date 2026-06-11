@@ -83,7 +83,7 @@ $list_has = false;
     </nav>
 
     <section class="grid">
-        {maccms:vod num="24" type="current" paging="yes" pageurl="vod/show" order="desc" by="time" id="vo" key="k"}
+        {maccms:vod num="24" type="current" paging="yes" pageurl="vod/show" order="desc" by="$show_by" id="vo" key="k"}
         {php} $list_has = true; {/php}
         <a class="card-poster" href="{:mac_url_vod_detail($vo)}">
             <div class="card-cover">

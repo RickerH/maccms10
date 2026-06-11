@@ -361,8 +361,40 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--bg-hover);
 }
 
-.theme-toggle .iconfont {
-  font-size: 18px;
+/* SVG 主题图标：默认暗色模式显示太阳（提示可切换到亮色） */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  width: 18px;
+  height: 18px;
+  display: none;
+  flex-shrink: 0;
+}
+
+:root .theme-toggle .icon-sun,
+[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+[data-theme="light"] .theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .icon-moon {
+  display: block;
+}
+
+/* ---- WAP 导航：logo 可收缩截断，右侧按钮组固定不压缩 ---- */
+.show-wap .nav-logo {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: var(--space-3);
+}
+
+.show-wap .nav-actions {
+  flex-shrink: 0;
 }
 
 /* ---- WAP 搜索触发按钮 ---- */
@@ -382,10 +414,6 @@ h1, h2, h3, h4, h5, h6 {
 .wap-search-trigger:hover {
   color: var(--text-primary);
   background: var(--bg-hover);
-}
-
-.wap-search-trigger .iconfont {
-  font-size: 20px;
 }
 
 /* ---- WAP 底部标签栏 ---- */
@@ -415,8 +443,10 @@ h1, h2, h3, h4, h5, h6 {
   transition: color 150ms;
 }
 
-.mobile-nav-item .iconfont {
-  font-size: 22px;
+.mobile-nav-item .nav-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
 }
 
 .mobile-nav-item.active {
@@ -434,6 +464,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 819px) {
   body {
+    padding-top: var(--nav-height);
     padding-bottom: var(--mobile-nav-height);
   }
 }

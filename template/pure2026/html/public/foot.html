@@ -1,24 +1,24 @@
 <nav class="mobile-bottom-nav show-wap">
     <a href="{$maccms.path}" class="mobile-nav-item active" aria-current="page">
-        <i class="iconfont">&#xe624;</i>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span>首页</span>
     </a>
     {maccms:type flag="vod" parent="0" order="asc" by="sort" num="1" id="vo"}
     <a href="{:mac_url('vod/type',['id'=>$vo.type_id])}" class="mobile-nav-item">
-        <i class="iconfont">&#xe637;</i>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         <span>分类</span>
     </a>
     {/maccms:type}
     <a href="{:mac_url('map/index')}" class="mobile-nav-item">
-        <i class="iconfont">&#xe608;</i>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         <span>排行</span>
     </a>
     <a href="{:mac_url('user/favs')}" class="mobile-nav-item">
-        <i class="iconfont">&#xe619;</i>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
         <span>收藏</span>
     </a>
     <a href="{:mac_url('user/index')}" class="mobile-nav-item">
-        <i class="iconfont">&#xe61b;</i>
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>我的</span>
     </a>
 </nav>

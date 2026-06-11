@@ -29,7 +29,7 @@ $list_has = false;
 
     {if condition="$search_wd neq ''"}
     <section class="grid">
-        {maccms:vod num="24" paging="yes" pageurl="vod/search" order="desc" by="time" id="vo" key="k"}
+        {maccms:vod num="24" paging="yes" pageurl="vod/search" order="desc" by="$search_by" id="vo" key="k"}
         {php} $list_has = true; {/php}
         <a class="card-poster" href="{:mac_url_vod_detail($vo)}">
             <div class="card-cover">

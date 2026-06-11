@@ -20,18 +20,12 @@
       var next = (current === 'light') ? 'dark' : 'light';
 
       html.setAttribute('data-theme', next);
+      toggleBtn.setAttribute('aria-label', (next === 'light') ? '切换到暗色模式' : '切换到亮色模式');
 
       try {
         localStorage.setItem('theme', next);
       } catch (e) {
         // localStorage unavailable (private browsing etc), silent fallback
-      }
-
-      // Update toggle icon to reflect current theme state
-      // --icon-sun: \e621 (huo / 太阳), --icon-moon: \e61a (qiehuan / 切换)
-      var icon = toggleBtn.querySelector('.iconfont');
-      if (icon) {
-        icon.innerHTML = (next === 'light') ? '&#xe61a;' : '&#xe621;';
       }
     });
   });
