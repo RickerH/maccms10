@@ -1,0 +1,28 @@
+<nav class="mobile-bottom-nav show-wap">
+    <a href="{$maccms.path}" class="mobile-nav-item active" aria-current="page">
+        <i class="iconfont">&#xe624;</i>
+        <span>首页</span>
+    </a>
+    <a href="{:mac_url('vod/type')}" class="mobile-nav-item">
+        <i class="iconfont">&#xe637;</i>
+        <span>分类</span>
+    </a>
+    <a href="{:mac_url('map/index')}" class="mobile-nav-item">
+        <i class="iconfont">&#xe608;</i>
+        <span>排行</span>
+    </a>
+    <a href="{:mac_url('user/favs')}" class="mobile-nav-item">
+        <i class="iconfont">&#xe619;</i>
+        <span>收藏</span>
+    </a>
+    <a href="{:mac_url('user/index')}" class="mobile-nav-item">
+        <i class="iconfont">&#xe61b;</i>
+        <span>我的</span>
+    </a>
+</nav>
+<script src="{$maccms.path_tpl}/asset/js/theme.js"></script>
+<footer class="site-footer">
+    <p>&copy; {:date('Y')} {$maccms.site_name}</p>
+</footer>
+</body>
+</html>

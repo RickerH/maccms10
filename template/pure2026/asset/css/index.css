@@ -121,6 +121,7 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -133,6 +134,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  transition: background-color 150ms, color 150ms;
 }
 
 a {
@@ -230,8 +232,245 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================================================
-   4. COMPONENTS        ← Story 2.1
+   4. COMPONENTS
    ============================================================ */
+
+/* ---- iconfont ---- */
+@font-face {
+  font-family: 'iconfont';
+  src: url('../fonts/iconfont.woff2') format('woff2'),
+       url('../fonts/iconfont.woff') format('woff'),
+       url('../fonts/iconfont.ttf') format('truetype');
+  font-display: swap;
+}
+
+.iconfont {
+  font-family: 'iconfont' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- 响应式显示控制 ---- */
+.show-pc { display: none; }
+.show-wap { display: flex; }
+
+@media (min-width: 820px) {
+  .show-pc { display: flex; }
+  .show-wap { display: none; }
+}
+
+/* ---- PC 导航栏 ---- */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--gutter-wap);
+}
+
+@media (min-width: 820px) {
+  .site-nav {
+    padding: 0 var(--gutter-pc);
+  }
+}
+
+.nav-logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-right: var(--space-8);
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: color 150ms, background-color 150ms;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.nav-search input {
+  height: 36px;
+  padding: 0 var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  width: 180px;
+  transition: border-color 150ms;
+}
+
+.nav-search input:focus {
+  border-color: var(--accent);
+}
+
+.nav-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: color 150ms, background-color 150ms;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.theme-toggle .iconfont {
+  font-size: 18px;
+}
+
+/* ---- WAP 底部标签栏 ---- */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--mobile-nav-height);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  display: flex;
+}
+
+.mobile-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  font-size: var(--font-label-size);
+  min-height: 44px;
+  cursor: pointer;
+  transition: color 150ms;
+}
+
+.mobile-nav-item .iconfont {
+  font-size: 22px;
+}
+
+.mobile-nav-item.active {
+  color: var(--accent);
+}
+
+/* ---- 导航占位 ---- */
+/* body padding 统一由本块管理；基础重置见 §2 */
+@media (min-width: 820px) {
+  body {
+    padding-top: var(--nav-height);
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 819px) {
+  body {
+    padding-bottom: var(--mobile-nav-height);
+  }
+}
+
+/* ---- 错误页 ---- */
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-height) - 120px);
+  text-align: center;
+  padding: var(--space-8);
+}
+
+.error-page .error-icon {
+  font-size: 72px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.error-page .error-title {
+  font-size: var(--font-heading-size);
+  font-weight: var(--font-heading-weight);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.error-page .error-desc {
+  font-size: var(--font-body-size);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+}
+
+/* ---- button-primary ---- */
+.button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: var(--radius-sm);
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+
+.button-primary:hover {
+  background: var(--accent-hover);
+}
+
+/* ---- 页脚 ---- */
+.site-footer {
+  text-align: center;
+  padding: var(--space-6) var(--gutter-wap);
+  color: var(--text-muted);
+  font-size: var(--font-caption-size);
+}
+
+@media (min-width: 820px) {
+  .site-footer {
+    padding: var(--space-6) var(--gutter-pc);
+  }
+}
 
 /* ============================================================
    5. PAGES             ← Stories 2.2+
