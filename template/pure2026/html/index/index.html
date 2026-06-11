@@ -1,0 +1,141 @@
+{include file="public/head" /}
+<main class="container">
+    <!-- ===== Hero Banner ===== -->
+    {php} $hero_has = false; $side_opened = false; {/php}
+    <section class="hero-banner">
+        {maccms:vod num="3" level="9" order="desc" by="time" id="vo" key="k"}
+        {php} $hero_has = true; {/php}
+        {if condition="$k eq 1"}
+        <!-- 主 Banner -->
+        <div class="hero-main">
+            <a href="{:mac_url_vod_detail($vo)}">
+                <img class="hero-bg" src="{$vo.vod_pic|mac_url_img}" alt="{$vo.vod_name}">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <h1 class="hero-title">{$vo.vod_name}</h1>
+                    <div class="hero-meta">
+                        {notempty name="vo.vod_year"}{$vo.vod_year} / {/notempty}
+                        {notempty name="vo.vod_area"}{$vo.vod_area} / {/notempty}
+                        {$vo.vod_remarks|mac_default=''}
+                    </div>
+                    <p class="hero-desc">{$vo.vod_blurb|mac_filter_html|mac_substring=80}</p>
+                    <a class="hero-play" href="{:mac_url_vod_play($vo,['sid'=>1,'nid'=>1])}">
+                        <i class="iconfont">&#xe62b;</i> 立即播放
+                    </a>
+                </div>
+            </a>
+        </div>
+        {else/}
+        <!-- 侧 Banner -->
+        {if condition="!$side_opened"}
+        {php} $side_opened = true; {/php}
+        <div class="hero-side">
+        {/if}
+            <div class="hero-side-item">
+                <a href="{:mac_url_vod_detail($vo)}">
+                    <img class="hero-bg" src="{$vo.vod_pic|mac_url_img}" alt="{$vo.vod_name}">
+                    <div class="hero-overlay"></div>
+                    <div class="hero-content">
+                        <div class="hero-title">{$vo.vod_name}</div>
+                        <div class="hero-meta">{$vo.vod_remarks|mac_default=$vo.vod_year}</div>
+                    </div>
+                </a>
+            </div>
+        {/if}
+        {/maccms:vod}
+        {if condition="$side_opened"}</div>{/if}
+        {if condition="!$hero_has"}
+        <div class="skeleton skeleton-hero"></div>
+        {/if}
+    </section>
+
+    <!-- ===== 分类胶囊导航 ===== -->
+    <nav class="quick-nav">
+        {maccms:type flag="vod" parent="0" order="asc" by="sort" id="vo"}
+        <a href="{:mac_url('vod/type',['id'=>$vo.type_id])}" class="quick-nav-pill{if condition='$param.id eq $vo.type_id'} active{/if}">{$vo.type_name}</a>
+        {/maccms:type}
+    </nav>
+
+    <!-- ===== 最近更新 ===== -->
+    <section>
+        <div class="section-title">
+            <h2>最近更新</h2>
+            <a class="more-link" href="{:mac_url('vod/type')}">查看更多 <i class="iconfont">&#xe613;</i></a>
+        </div>
+        <div class="grid">
+            {maccms:vod num="12" order="desc" by="time" id="vo" key="k"}
+            <a class="card-poster" href="{:mac_url_vod_detail($vo)}">
+                <div class="card-cover">
+                    <img src="{$vo.vod_pic|mac_url_img}" alt="{$vo.vod_name}" loading="lazy">
+                    <div class="card-play-overlay">
+                        <i class="iconfont">&#xe62b;</i>
+                    </div>
+                    {notempty name="vo.vod_remarks"}
+                    <span class="card-badge card-badge-quality">{$vo.vod_remarks}</span>
+                    {/notempty}
+                    {notempty name="vo.vod_score"}
+                    <span class="card-badge card-badge-score">{$vo.vod_score}</span>
+                    {/notempty}
+                    {notempty name="vo.vod_serial"}
+                    <span class="card-badge card-badge-episode">{$vo.vod_serial}</span>
+                    {else/}
+                    {notempty name="vo.vod_total"}
+                    <span class="card-badge card-badge-episode">全{$vo.vod_total}集</span>
+                    {/notempty}
+                    {/notempty}
+                </div>
+                <div class="card-title">{$vo.vod_name}</div>
+                <div class="card-sub">
+                    {notempty name="vo.vod_actor"}
+                    {$vo.vod_actor}
+                    {else/}
+                    {$vo.vod_area|mac_default=''}
+                    {/notempty}
+                </div>
+            </a>
+            {/maccms:vod}
+        </div>
+    </section>
+
+    <!-- ===== 热门推荐 ===== -->
+    <section>
+        <div class="section-title">
+            <h2>热门推荐</h2>
+            <a class="more-link" href="{:mac_url('vod/type')}">查看更多 <i class="iconfont">&#xe613;</i></a>
+        </div>
+        <div class="grid">
+            {maccms:vod num="12" order="desc" by="hits" id="vo" key="k"}
+            <a class="card-poster" href="{:mac_url_vod_detail($vo)}">
+                <div class="card-cover">
+                    <img src="{$vo.vod_pic|mac_url_img}" alt="{$vo.vod_name}" loading="lazy">
+                    <div class="card-play-overlay">
+                        <i class="iconfont">&#xe62b;</i>
+                    </div>
+                    {notempty name="vo.vod_remarks"}
+                    <span class="card-badge card-badge-quality">{$vo.vod_remarks}</span>
+                    {/notempty}
+                    {notempty name="vo.vod_score"}
+                    <span class="card-badge card-badge-score">{$vo.vod_score}</span>
+                    {/notempty}
+                    {notempty name="vo.vod_serial"}
+                    <span class="card-badge card-badge-episode">{$vo.vod_serial}</span>
+                    {else/}
+                    {notempty name="vo.vod_total"}
+                    <span class="card-badge card-badge-episode">全{$vo.vod_total}集</span>
+                    {/notempty}
+                    {/notempty}
+                </div>
+                <div class="card-title">{$vo.vod_name}</div>
+                <div class="card-sub">
+                    {notempty name="vo.vod_actor"}
+                    {$vo.vod_actor}
+                    {else/}
+                    {$vo.vod_area|mac_default=''}
+                    {/notempty}
+                </div>
+            </a>
+            {/maccms:vod}
+        </div>
+    </section>
+</main>
+{include file="public/foot" /}
