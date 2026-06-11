@@ -3,10 +3,12 @@
         <i class="iconfont">&#xe624;</i>
         <span>首页</span>
     </a>
-    <a href="{:mac_url('vod/type',['id'=>1])}" class="mobile-nav-item">
+    {maccms:type flag="vod" parent="0" order="asc" by="sort" num="1" id="vo"}
+    <a href="{:mac_url('vod/type',['id'=>$vo.type_id])}" class="mobile-nav-item">
         <i class="iconfont">&#xe637;</i>
         <span>分类</span>
     </a>
+    {/maccms:type}
     <a href="{:mac_url('map/index')}" class="mobile-nav-item">
         <i class="iconfont">&#xe608;</i>
         <span>排行</span>

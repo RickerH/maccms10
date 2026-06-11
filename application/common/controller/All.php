@@ -253,10 +253,10 @@ polyfill;
         $param = mac_param_url();
         $param = mac_filter_words($param);
         $param = mac_search_len_check($param);
-        $info = mac_label_type($param, $type_id_specified);
         if(!empty($GLOBALS['config']['app']['wall_filter'])){
-            $param['wd'] = mac_escape_param($param['wd']);
+            $param['wd'] = mac_escape_param($param['wd'] ?? '');
         }
+        $info = mac_label_type($param, $type_id_specified);
         $this->assign('param',$param);
         $this->assign('obj',$info);
         if(empty($info)){

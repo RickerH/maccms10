@@ -1,7 +1,6 @@
 {include file="public/head" /}
 {php}
 $search_wd = isset($param['wd']) ? trim((string)$param['wd']) : '';
-$search_wd_safe = htmlspecialchars($search_wd, ENT_QUOTES, 'UTF-8');
 $search_by = isset($param['by']) && in_array($param['by'], ['time', 'hits', 'score']) ? $param['by'] : 'time';
 $list_has = false;
 {/php}
@@ -11,14 +10,14 @@ $list_has = false;
         <span class="breadcrumb-separator">/</span>
         <a href="{:mac_url('vod/search')}">搜索</a>
         <span class="breadcrumb-separator">/</span>
-        <span>{$search_wd_safe|mac_default='关键词'}</span>
+        <span>{$search_wd|htmlspecialchars|mac_default='关键词'}</span>
     </nav>
 
     <section class="list-header">
         <div>
             <p class="list-kicker">Search</p>
             <h1 class="list-title">搜索结果</h1>
-            <p class="list-desc">与“{$search_wd_safe|mac_default='关键词'}”相关的影片</p>
+            <p class="list-desc">与“{$search_wd|htmlspecialchars|mac_default='关键词'}”相关的影片</p>
         </div>
     </section>
 
@@ -28,34 +27,36 @@ $list_has = false;
         <a class="quick-nav-pill{if condition="$search_by eq 'score'"} active{/if}" href="{:mac_url('vod/search', array_merge($param, ['by' => 'score', 'page' => 1]))}">评分</a>
     </nav>
 
+    {if condition="$search_wd neq ''"}
     <section class="grid">
-        {maccms:vod num="24" paging="yes" order="desc" by="'.$search_by.'" id="vo" key="k"}
+        {maccms:vod num="24" paging="yes" pageurl="vod/search" order="desc" by="time" id="vo" key="k"}
         {php} $list_has = true; {/php}
         <a class="card-poster" href="{:mac_url_vod_detail($vo)}">
             <div class="card-cover">
-                <img src="{$vo.vod_pic|mac_url_img}" alt="{$vo.vod_name}" loading="lazy">
+                <img src="{$vo.vod_pic|mac_url_img|htmlspecialchars}" alt="{$vo.vod_name|htmlspecialchars}" loading="lazy">
                 <div class="card-play-overlay">
                     <i class="iconfont">&#xe62b;</i>
                 </div>
                 {notempty name="vo.vod_remarks"}
-                <span class="card-badge card-badge-quality">{$vo.vod_remarks}</span>
+                <span class="card-badge card-badge-quality">{$vo.vod_remarks|htmlspecialchars}</span>
                 {/notempty}
                 {notempty name="vo.vod_score"}
-                <span class="card-badge card-badge-score">{$vo.vod_score}</span>
+                <span class="card-badge card-badge-score">{$vo.vod_score|htmlspecialchars}</span>
                 {/notempty}
                 {notempty name="vo.vod_serial"}
-                <span class="card-badge card-badge-episode">{$vo.vod_serial}</span>
+                <span class="card-badge card-badge-episode">{$vo.vod_serial|htmlspecialchars}</span>
                 {else/}
                 {notempty name="vo.vod_total"}
-                <span class="card-badge card-badge-episode">全{$vo.vod_total}集</span>
+                <span class="card-badge card-badge-episode">全{$vo.vod_total|htmlspecialchars}集</span>
                 {/notempty}
                 {/notempty}
             </div>
-            <div class="card-title">{$vo.vod_name}</div>
-            <div class="card-sub">{notempty name="vo.vod_actor"}{$vo.vod_actor}{else/}{$vo.vod_area|mac_default=''}{/notempty}</div>
+            <div class="card-title">{$vo.vod_name|htmlspecialchars}</div>
+            <div class="card-sub">{notempty name="vo.vod_actor"}{$vo.vod_actor|htmlspecialchars}{else/}{$vo.vod_area|htmlspecialchars|mac_default=''}{/notempty}</div>
         </a>
         {/maccms:vod}
     </section>
+    {/if}
 
     {if condition="$list_has"}
     {include file="public/paging" /}
