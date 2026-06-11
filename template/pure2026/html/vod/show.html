@@ -1,0 +1,124 @@
+{include file="public/head" /}
+{php}
+$show_by = isset($param['by']) && in_array($param['by'], ['time', 'hits', 'score']) ? $param['by'] : 'time';
+$list_has = false;
+{/php}
+<main class="container list-page">
+    <nav class="breadcrumb" aria-label="面包屑导航">
+        <a href="{$maccms.path}">首页</a>
+        <span class="breadcrumb-separator">/</span>
+        <span>筛选</span>
+    </nav>
+
+    <section class="list-header">
+        <div>
+            <p class="list-kicker">Browse</p>
+            <h1 class="list-title">影片筛选</h1>
+            <p class="list-desc">按分类、地区、语言、年份、版本和状态组合筛选。</p>
+        </div>
+    </section>
+
+    <section class="filter-bar" aria-label="影片筛选条件">
+        <div class="filter-group">
+            <div class="filter-label">分类</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill{if condition="empty($param['tid'])"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['tid' => '', 'page' => 1]))}">全部</a>
+                {maccms:type flag="vod" parent="0" order="asc" by="sort" id="vo"}
+                <a class="quick-nav-pill{if condition="isset($param['tid']) && $param['tid'] eq $vo.type_id"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['tid' => $vo.type_id, 'page' => 1]))}">{$vo.type_name}</a>
+                {/maccms:type}
+            </div>
+        </div>
+        <div class="filter-group">
+            <div class="filter-label">地区</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill{if condition="empty($param['area'])"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['area' => '', 'page' => 1]))}">全部</a>
+                {maccms:area order="asc" num="20" id="vo"}
+                <a class="quick-nav-pill{if condition="isset($param['area']) && $param['area'] eq $vo.area_name"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['area' => $vo.area_name, 'page' => 1]))}">{$vo.area_name}</a>
+                {/maccms:area}
+            </div>
+        </div>
+        <div class="filter-group">
+            <div class="filter-label">语言</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill{if condition="empty($param['lang'])"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['lang' => '', 'page' => 1]))}">全部</a>
+                {maccms:lang order="asc" num="20" id="vo"}
+                <a class="quick-nav-pill{if condition="isset($param['lang']) && $param['lang'] eq $vo.lang_name"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['lang' => $vo.lang_name, 'page' => 1]))}">{$vo.lang_name}</a>
+                {/maccms:lang}
+            </div>
+        </div>
+        <div class="filter-group">
+            <div class="filter-label">年份</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill{if condition="empty($param['year'])"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['year' => '', 'page' => 1]))}">全部</a>
+                {maccms:year order="desc" num="20" id="vo"}
+                <a class="quick-nav-pill{if condition="isset($param['year']) && $param['year'] eq $vo.year_name"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['year' => $vo.year_name, 'page' => 1]))}">{$vo.year_name}</a>
+                {/maccms:year}
+            </div>
+        </div>
+        <div class="filter-group">
+            <div class="filter-label">版本</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill{if condition="empty($param['version'])"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['version' => '', 'page' => 1]))}">全部</a>
+                {maccms:version order="asc" num="20" id="vo"}
+                <a class="quick-nav-pill{if condition="isset($param['version']) && $param['version'] eq $vo.version_name"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['version' => $vo.version_name, 'page' => 1]))}">{$vo.version_name}</a>
+                {/maccms:version}
+            </div>
+        </div>
+        <div class="filter-group">
+            <div class="filter-label">状态</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill{if condition="empty($param['state'])"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['state' => '', 'page' => 1]))}">全部</a>
+                {maccms:state order="asc" num="20" id="vo"}
+                <a class="quick-nav-pill{if condition="isset($param['state']) && $param['state'] eq $vo.state_name"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['state' => $vo.state_name, 'page' => 1]))}">{$vo.state_name}</a>
+                {/maccms:state}
+            </div>
+        </div>
+    </section>
+
+    <nav class="sort-tabs" aria-label="排序方式">
+        <a class="quick-nav-pill{if condition="$show_by eq 'time'"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['by' => 'time', 'page' => 1]))}">最新</a>
+        <a class="quick-nav-pill{if condition="$show_by eq 'hits'"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['by' => 'hits', 'page' => 1]))}">最热</a>
+        <a class="quick-nav-pill{if condition="$show_by eq 'score'"} active{/if}" href="{:mac_url('vod/show', array_merge($param, ['by' => 'score', 'page' => 1]))}">评分</a>
+    </nav>
+
+    <section class="grid">
+        {maccms:vod num="24" paging="yes" order="desc" by="'.$show_by.'" id="vo" key="k"}
+        {php} $list_has = true; {/php}
+        <a class="card-poster" href="{:mac_url_vod_detail($vo)}">
+            <div class="card-cover">
+                <img src="{$vo.vod_pic|mac_url_img}" alt="{$vo.vod_name}" loading="lazy">
+                <div class="card-play-overlay">
+                    <i class="iconfont">&#xe62b;</i>
+                </div>
+                {notempty name="vo.vod_remarks"}
+                <span class="card-badge card-badge-quality">{$vo.vod_remarks}</span>
+                {/notempty}
+                {notempty name="vo.vod_score"}
+                <span class="card-badge card-badge-score">{$vo.vod_score}</span>
+                {/notempty}
+                {notempty name="vo.vod_serial"}
+                <span class="card-badge card-badge-episode">{$vo.vod_serial}</span>
+                {else/}
+                {notempty name="vo.vod_total"}
+                <span class="card-badge card-badge-episode">全{$vo.vod_total}集</span>
+                {/notempty}
+                {/notempty}
+            </div>
+            <div class="card-title">{$vo.vod_name}</div>
+            <div class="card-sub">{notempty name="vo.vod_actor"}{$vo.vod_actor}{else/}{$vo.vod_area|mac_default=''}{/notempty}</div>
+        </a>
+        {/maccms:vod}
+    </section>
+
+    {if condition="$list_has"}
+    {include file="public/paging" /}
+    {else/}
+    <section class="empty-state">
+        <i class="iconfont empty-icon">&#xe60b;</i>
+        <h2 class="empty-title">暂无内容</h2>
+        <p class="empty-desc">当前筛选条件下没有影片，调整条件再试试。</p>
+        <a class="button-primary" href="{:mac_url('vod/show')}">重置筛选</a>
+    </section>
+    {/if}
+</main>
+{include file="public/foot" /}

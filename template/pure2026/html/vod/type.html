@@ -1,0 +1,69 @@
+{include file="public/head" /}
+{php}
+$type_id = isset($obj['type_id']) ? intval($obj['type_id']) : (isset($param['id']) ? intval($param['id']) : 0);
+$type_name = isset($obj['type_name']) && $obj['type_name'] !== '' ? $obj['type_name'] : '视频分类';
+$type_by = isset($param['by']) && in_array($param['by'], ['time', 'hits', 'score']) ? $param['by'] : 'time';
+$list_has = false;
+{/php}
+<main class="container list-page">
+    <nav class="breadcrumb" aria-label="面包屑导航">
+        <a href="{$maccms.path}">首页</a>
+        <span class="breadcrumb-separator">/</span>
+        <span>{$type_name}</span>
+    </nav>
+
+    <section class="list-header">
+        <div>
+            <p class="list-kicker">Category</p>
+            <h1 class="list-title">{$type_name}</h1>
+            <p class="list-desc">按分类浏览影片，支持最新、最热和评分排序。</p>
+        </div>
+    </section>
+
+    <nav class="sort-tabs" aria-label="排序方式">
+        <a class="quick-nav-pill{if condition="$type_by eq 'time'"} active{/if}" href="{:mac_url('vod/type', array_merge($param, ['id' => $type_id, 'by' => 'time', 'page' => 1]))}">最新</a>
+        <a class="quick-nav-pill{if condition="$type_by eq 'hits'"} active{/if}" href="{:mac_url('vod/type', array_merge($param, ['id' => $type_id, 'by' => 'hits', 'page' => 1]))}">最热</a>
+        <a class="quick-nav-pill{if condition="$type_by eq 'score'"} active{/if}" href="{:mac_url('vod/type', array_merge($param, ['id' => $type_id, 'by' => 'score', 'page' => 1]))}">评分</a>
+    </nav>
+
+    <section class="grid">
+        {maccms:vod num="24" type="'.$type_id.'" paging="yes" order="desc" by="'.$type_by.'" id="vo" key="k"}
+        {php} $list_has = true; {/php}
+        <a class="card-poster" href="{:mac_url_vod_detail($vo)}">
+            <div class="card-cover">
+                <img src="{$vo.vod_pic|mac_url_img}" alt="{$vo.vod_name}" loading="lazy">
+                <div class="card-play-overlay">
+                    <i class="iconfont">&#xe62b;</i>
+                </div>
+                {notempty name="vo.vod_remarks"}
+                <span class="card-badge card-badge-quality">{$vo.vod_remarks}</span>
+                {/notempty}
+                {notempty name="vo.vod_score"}
+                <span class="card-badge card-badge-score">{$vo.vod_score}</span>
+                {/notempty}
+                {notempty name="vo.vod_serial"}
+                <span class="card-badge card-badge-episode">{$vo.vod_serial}</span>
+                {else/}
+                {notempty name="vo.vod_total"}
+                <span class="card-badge card-badge-episode">全{$vo.vod_total}集</span>
+                {/notempty}
+                {/notempty}
+            </div>
+            <div class="card-title">{$vo.vod_name}</div>
+            <div class="card-sub">{notempty name="vo.vod_actor"}{$vo.vod_actor}{else/}{$vo.vod_area|mac_default=''}{/notempty}</div>
+        </a>
+        {/maccms:vod}
+    </section>
+
+    {if condition="$list_has"}
+    {include file="public/paging" /}
+    {else/}
+    <section class="empty-state">
+        <i class="iconfont empty-icon">&#xe60b;</i>
+        <h2 class="empty-title">暂无内容</h2>
+        <p class="empty-desc">这个分类暂时没有影片，去看看其他分类吧。</p>
+        <a class="button-primary" href="{$maccms.path}">返回首页</a>
+    </section>
+    {/if}
+</main>
+{include file="public/foot" /}

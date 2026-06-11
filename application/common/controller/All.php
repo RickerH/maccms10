@@ -263,11 +263,10 @@ polyfill;
             return $this->error(lang('controller/get_type_err'));
         }
         if($view<2) {
-            $res = $this->check_user_popedom($info['type_id'], 1);
-            if($res['code']>1){
-                echo $this->error($res['msg'], mac_url('user/index') );
-                exit;
-            }
+            // Public front-end list pages should remain browseable without forcing
+            // guests into the member center. Detail/play/down permissions are still
+            // handled by their dedicated checks below.
+            $res = ['code' => 1, 'msg' => lang('controller/popedom_ok')];
         }
         return $info;
     }
