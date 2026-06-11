@@ -63,9 +63,12 @@ $list_has = false;
     {else/}
     <section class="empty-state">
         <i class="iconfont empty-icon">&#xe60b;</i>
-        <h2 class="empty-title">未找到相关影片，试试其他关键词</h2>
+        <h2 class="empty-title">未找到相关影片</h2>
         <p class="empty-desc">换个片名、演员或导演再搜一次，也可以回首页看看最新更新。</p>
-        <a class="button-primary" href="{$maccms.path}">返回首页</a>
+        <div class="empty-actions">
+            <a class="button-primary" href="{$maccms.path}">返回首页</a>
+            <a class="button-secondary" href="{:mac_url('vod/type',['id'=>1])}">去看看其他分类</a>
+        </div>
     </section>
     {/if}
 </main>

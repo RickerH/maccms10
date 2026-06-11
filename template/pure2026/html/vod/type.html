@@ -62,7 +62,10 @@ $list_has = false;
         <i class="iconfont empty-icon">&#xe60b;</i>
         <h2 class="empty-title">暂无内容</h2>
         <p class="empty-desc">这个分类暂时没有影片，去看看其他分类吧。</p>
-        <a class="button-primary" href="{$maccms.path}">返回首页</a>
+        <div class="empty-actions">
+            <a class="button-primary" href="{$maccms.path}">返回首页</a>
+            <a class="button-secondary" href="{:mac_url('vod/type',['id'=>1])}">去看看其他分类</a>
+        </div>
     </section>
     {/if}
 </main>

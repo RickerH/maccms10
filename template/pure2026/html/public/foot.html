@@ -22,6 +22,16 @@
         <span>我的</span>
     </a>
 </nav>
+<!-- 全屏搜索覆盖层（WAP）-->
+<div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <form class="search-overlay-header" action="{:mac_url('vod/search')}">
+        <input name="wd" type="text" placeholder="搜索影片…" autocomplete="off">
+        <button type="submit" class="search-overlay-submit">搜索</button>
+        <button type="button" class="search-overlay-cancel" id="searchOverlayCancel">取消</button>
+    </form>
+    <div class="search-overlay-body"></div>
+</div>
+
 <script src="{$maccms.path_tpl}/asset/js/theme.js"></script>
 <footer class="site-footer">
     <p>&copy; {:date('Y')} {$maccms.site_name}</p>

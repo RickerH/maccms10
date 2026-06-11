@@ -76,4 +76,45 @@
     syncState();
   });
 
+  /* ============================================================
+     WAP Search Overlay
+     ============================================================ */
+  document.addEventListener('DOMContentLoaded', function() {
+    var trigger = document.querySelector('.wap-search-trigger');
+    var overlay = document.getElementById('searchOverlay');
+    if (!trigger || !overlay) return;
+
+    var cancel = document.getElementById('searchOverlayCancel');
+    var input = overlay.querySelector('input[name="wd"]');
+
+    function openOverlay() {
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (input) {
+        setTimeout(function() { input.focus(); }, 150);
+      }
+    }
+
+    function closeOverlay() {
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (input) input.value = '';
+    }
+
+    trigger.addEventListener('click', openOverlay);
+
+    if (cancel) {
+      cancel.addEventListener('click', closeOverlay);
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) {
+        closeOverlay();
+      }
+    });
+  });
+
 })();

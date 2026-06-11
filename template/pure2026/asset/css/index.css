@@ -77,6 +77,8 @@
   --hero-height-wap: 220px;
   --mobile-nav-height: 56px;
   --card-aspect: 2/3;
+
+  --text-on-accent: #ffffff;
 }
 
 /* --- 亮色模式覆盖 --- */
@@ -92,6 +94,8 @@
   --text-primary: #1C1917;
   --text-secondary: #57534E;
   --text-muted: #A8A29E;
+
+  --text-on-accent: #ffffff;
 }
 
 /* --- 减少动画偏好 --- */
@@ -252,12 +256,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ---- 响应式显示控制 ---- */
-.show-pc { display: none; }
-.show-wap { display: flex; }
+.show-pc { display: none !important; }
+.show-wap { display: flex !important; }
 
 @media (min-width: 820px) {
-  .show-pc { display: flex; }
-  .show-wap { display: none; }
+  .show-pc { display: flex !important; }
+  .show-wap { display: none !important; }
 }
 
 /* ---- PC 导航栏 ---- */
@@ -331,6 +335,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-search input:focus {
   border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
 }
 
 .nav-search input::placeholder {
@@ -357,6 +363,29 @@ h1, h2, h3, h4, h5, h6 {
 
 .theme-toggle .iconfont {
   font-size: 18px;
+}
+
+/* ---- WAP 搜索触发按钮 ---- */
+.wap-search-trigger {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: color 150ms, background-color 150ms;
+  flex-shrink: 0;
+}
+
+.wap-search-trigger:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.wap-search-trigger .iconfont {
+  font-size: 20px;
 }
 
 /* ---- WAP 底部标签栏 ---- */
@@ -917,8 +946,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .paging-link,
 .paging-info {
-  min-width: 40px;
-  height: 40px;
+  min-width: 44px;
+  height: 44px;
   padding: 0 var(--space-3);
   display: inline-flex;
   align-items: center;
@@ -1066,6 +1095,132 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--font-body-size);
   color: var(--text-secondary);
   margin-bottom: var(--space-6);
+}
+
+/* ---- 空状态操作按钮组 ---- */
+.empty-state .empty-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.empty-state .button-primary,
+.empty-state .button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-body-size);
+  font-weight: 600;
+  padding: 10px 22px;
+  text-decoration: none;
+  transition: background-color 150ms, color 150ms;
+}
+
+.empty-state .button-primary {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.empty-state .button-primary:hover {
+  background: var(--accent-hover);
+}
+
+.empty-state .button-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.empty-state .button-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+/* ---- 全屏搜索覆盖层 ---- */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg-base);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms, visibility 150ms;
+}
+
+.search-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.search-overlay-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.search-overlay-header input {
+  flex: 1;
+  height: 48px;
+  padding: 0 var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-body-size);
+  transition: border-color 150ms;
+}
+
+.search-overlay-header input:focus {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.search-overlay-header input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-overlay-submit {
+  flex-shrink: 0;
+  padding: 0 var(--space-4);
+  height: 48px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-on-accent);
+  font-size: var(--font-body-size);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 150ms;
+}
+
+.search-overlay-submit:hover {
+  background: var(--accent-hover);
+}
+
+.search-overlay-cancel {
+  flex-shrink: 0;
+  padding: 0 var(--space-4);
+  height: 48px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: var(--font-body-size);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 150ms;
+}
+
+.search-overlay-cancel:hover {
+  color: var(--text-primary);
 }
 
 /* ============================================================
