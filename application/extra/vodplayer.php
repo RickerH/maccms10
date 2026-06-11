@@ -100,4 +100,43 @@ return array (
     'sort' => '8',
     'tip' => '',
   ),
+  'bfzym3u8' => 
+  array (
+    'status' => '1',
+    'from' => 'bfzym3u8',
+    'show' => 'bfzym3u8播放器',
+    'des' => '自动添加',
+    'target' => '_self',
+    'ps' => '0',
+    'parse' => '',
+    'sort' => '800',
+    'tip' => '自动配置',
+    'id' => 'bfzym3u8',
+  ),
+  'liangzi' => 
+  array (
+    'status' => '1',
+    'from' => 'liangzi',
+    'show' => 'liangzi播放器',
+    'des' => '自动添加',
+    'target' => '_self',
+    'ps' => '0',
+    'parse' => '',
+    'sort' => '800',
+    'tip' => '自动配置',
+    'id' => 'liangzi',
+  ),
+  'lzm3u8' => 
+  array (
+    'status' => '1',
+    'from' => 'lzm3u8',
+    'show' => 'lzm3u8播放器',
+    'des' => '自动添加',
+    'target' => '_self',
+    'ps' => '0',
+    'parse' => '',
+    'sort' => '800',
+    'tip' => '自动配置',
+    'id' => 'lzm3u8',
+  ),
 );

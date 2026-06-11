@@ -111,4 +111,93 @@
     });
   });
 
+
+  /* ============================================================
+     Detail Page
+     ============================================================ */
+  document.addEventListener('DOMContentLoaded', function() {
+    // Description expand/collapse
+    var desc = document.getElementById('detailDesc');
+    var expandBtn = document.getElementById('detailExpandBtn');
+    if (desc && expandBtn) {
+      expandBtn.addEventListener('click', function() {
+        var expanded = desc.classList.toggle('expanded');
+        desc.textContent = expanded ? (desc.getAttribute('data-full') || desc.textContent) : (desc.getAttribute('data-short') || desc.textContent);
+        expandBtn.textContent = expanded ? '收起' : '展开';
+      });
+    }
+
+    // Play group tab switching
+    var tabsContainer = document.querySelector('.play-group-tabs');
+    if (tabsContainer) {
+      tabsContainer.addEventListener('click', function(e) {
+        var tab = e.target.closest('.play-group-tab');
+        if (!tab) return;
+        var sid = tab.getAttribute('data-sid');
+        tabsContainer.querySelectorAll('.play-group-tab').forEach(function(t) {
+          t.classList.toggle('active', t === tab);
+        });
+        document.querySelectorAll('.episode-panel').forEach(function(panel) {
+          panel.classList.toggle('active', panel.getAttribute('data-sid') === sid);
+        });
+      });
+    }
+
+    // Episode chunk fold/unfold
+    document.addEventListener('click', function(e) {
+      var header = e.target.closest('.episode-chunk-header');
+      if (!header) return;
+      var chunk = header.parentElement;
+      var list = chunk && chunk.querySelector('.episode-chunk-list');
+      if (list) list.classList.toggle('collapsed');
+    });
+
+    // Share button
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.detail-share-btn');
+      if (!btn) return;
+      var url = window.location.href;
+      var title = document.title;
+      if (navigator.share && window.innerWidth < 820) {
+        navigator.share({ title: title, url: url }).catch(function() {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '已复制链接';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() { prompt('复制链接：', url); });
+      } else {
+        prompt('复制链接：', url);
+      }
+    });
+
+    // Login gate — close button and background click
+    document.addEventListener('click', function(e) {
+      var overlay = document.getElementById('loginGateOverlay');
+      if (!overlay) return;
+      if (e.target.closest('.login-gate-close') || e.target === overlay) {
+        overlay.classList.remove('active');
+      }
+    });
+
+    // Login gate — ESC close
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Escape') return;
+      var overlay = document.getElementById('loginGateOverlay');
+      if (overlay) overlay.classList.remove('active');
+    });
+  });
+
+  // Login gate — capture phase intercepts mac_ulog before jQuery handler
+  document.addEventListener('click', function(e) {
+    var favBtn = e.target.closest('.mac_ulog[data-type="2"]');
+    if (!favBtn) return;
+    var overlay = document.getElementById('loginGateOverlay');
+    if (!overlay) return;
+    if (overlay.getAttribute('data-logged-in') !== '1') {
+      e.stopImmediatePropagation();
+      overlay.classList.add('active');
+    }
+  }, true);
+
 })();

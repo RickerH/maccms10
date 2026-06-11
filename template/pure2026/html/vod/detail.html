@@ -1,0 +1,287 @@
+{include file="public/head" /}
+{php}
+$vod_id = isset($obj['vod_id']) ? intval($obj['vod_id']) : 0;
+$play_groups = [];
+if (!empty($obj['vod_play_list']) && is_array($obj['vod_play_list'])) {
+    foreach ($obj['vod_play_list'] as $sid => $group) {
+        $urls = !empty($group['urls']) && is_array($group['urls']) ? array_values($group['urls']) : [];
+        if (empty($urls)) {
+            continue;
+        }
+        $player_info = !empty($group['player_info']) && is_array($group['player_info']) ? $group['player_info'] : [];
+        $group_name = !empty($player_info['show']) ? $player_info['show'] : (!empty($group['from']) ? $group['from'] : ('线路' . intval($sid)));
+        $play_groups[] = [
+            'sid' => intval($sid),
+            'name' => $group_name,
+            'urls' => $urls,
+        ];
+    }
+} elseif (!empty($obj['vod_play_from']) && !empty($obj['vod_play_url'])) {
+    $play_from_arr = array_values(array_filter(explode('$$$', $obj['vod_play_from'])));
+    $play_url_arr = array_values(array_filter(explode('$$$', $obj['vod_play_url'])));
+    foreach ($play_from_arr as $idx => $from_name) {
+        $eps = !empty($play_url_arr[$idx]) ? array_values(array_filter(explode('#', $play_url_arr[$idx]))) : [];
+        if (empty($eps)) {
+            continue;
+        }
+        $urls = [];
+        foreach ($eps as $nid => $ep) {
+            $parts = explode('$', $ep, 2);
+            $urls[] = [
+                'name' => !empty($parts[0]) ? $parts[0] : ('第' . ($nid + 1) . '集'),
+                'nid' => $nid + 1,
+            ];
+        }
+        $play_groups[] = [
+            'sid' => $idx + 1,
+            'name' => $from_name,
+            'urls' => $urls,
+        ];
+    }
+}
+$actor_arr = [];
+if (!empty($obj['vod_actor'])) {
+    $actor_arr = array_slice(
+        array_filter(array_map('trim', explode(',', $obj['vod_actor']))),
+        0, 20
+    );
+}
+$has_play = !empty($play_groups);
+$multi_group = count($play_groups) > 1;
+$desc_text = !empty($obj['vod_content']) ? mac_filter_html($obj['vod_content']) : '';
+$desc_need_expand = mb_strlen($desc_text, 'UTF-8') > 200;
+$desc_short = $desc_need_expand ? mb_substr($desc_text, 0, 200, 'UTF-8') . '...' : $desc_text;
+$first_play_link = !empty($obj['vod_play_link']) ? $obj['vod_play_link'] : '';
+if (empty($first_play_link) && $has_play) {
+    $first_group = $play_groups[0];
+    $first_ep = $first_group['urls'][0];
+    $first_play_link = mac_url_vod_play($obj, [
+        'sid' => $first_group['sid'],
+        'nid' => !empty($first_ep['nid']) ? intval($first_ep['nid']) : 1,
+    ]);
+}
+$user_logged_in = !empty($GLOBALS['user']['user_id']);
+{/php}
+<main class="container detail-page">
+
+    <nav class="breadcrumb" aria-label="面包屑导航">
+        <a href="{$maccms.path}">首页</a>
+        <span class="breadcrumb-separator">/</span>
+        {notempty name="obj.type.type_name"}
+        <a href="{:mac_url('vod/type', ['id'=>$obj['type']['type_id']])}">{$obj.type.type_name|htmlspecialchars}</a>
+        <span class="breadcrumb-separator">/</span>
+        {/notempty}
+        <span style="color:var(--text-secondary)">{$obj.vod_name|htmlspecialchars}</span>
+    </nav>
+
+    <section class="detail-hero">
+        <div class="detail-cover">
+            <img src="{$obj.vod_pic|mac_url_img|htmlspecialchars}" alt="{$obj.vod_name|htmlspecialchars}" loading="lazy">
+        </div>
+        <div class="detail-info">
+            <h1 class="detail-title">{$obj.vod_name|htmlspecialchars}</h1>
+
+            {notempty name="obj.vod_sub"}
+            <div class="detail-subtitle">{$obj.vod_sub|htmlspecialchars}</div>
+            {/notempty}
+
+            {if condition="$obj['vod_score'] gt 0"}
+            <div class="detail-score">{$obj.vod_score|htmlspecialchars} 分</div>
+            {/if}
+
+            {notempty name="obj.type.type_name"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">分类</span>
+                <span class="detail-meta-value">
+                    <a href="{:mac_url('vod/type', ['id'=>$obj['type']['type_id']])}">{$obj.type.type_name|htmlspecialchars}</a>
+                </span>
+            </div>
+            {/notempty}
+
+            {if condition="$obj['vod_year'] gt 0"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">年份</span>
+                <span class="detail-meta-value">{$obj.vod_year|htmlspecialchars}</span>
+            </div>
+            {/if}
+
+            {notempty name="obj.vod_area"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">地区</span>
+                <span class="detail-meta-value">{$obj.vod_area|htmlspecialchars}</span>
+            </div>
+            {/notempty}
+
+            {notempty name="obj.vod_lang"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">语言</span>
+                <span class="detail-meta-value">{$obj.vod_lang|htmlspecialchars}</span>
+            </div>
+            {/notempty}
+
+            {notempty name="obj.vod_director"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">导演</span>
+                <span class="detail-meta-value">{$obj.vod_director|htmlspecialchars}</span>
+            </div>
+            {/notempty}
+
+            {notempty name="obj.vod_actor"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">演员</span>
+                <span class="detail-meta-value">{$obj.vod_actor|mac_substring=60|htmlspecialchars}</span>
+            </div>
+            {/notempty}
+
+            {notempty name="obj.vod_state"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">状态</span>
+                <span class="detail-meta-value">{$obj.vod_state|htmlspecialchars}</span>
+            </div>
+            {/notempty}
+
+            {notempty name="obj.vod_remarks"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">画质</span>
+                <span class="detail-meta-value">{$obj.vod_remarks|htmlspecialchars}</span>
+            </div>
+            {/notempty}
+
+            {if condition="$obj['vod_total'] gt 0"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">总集数</span>
+                <span class="detail-meta-value">{$obj.vod_total|htmlspecialchars}集</span>
+            </div>
+            {/if}
+
+            {notempty name="obj.vod_serial"}
+            <div class="detail-meta-row">
+                <span class="detail-meta-label">更新至</span>
+                <span class="detail-meta-value">{$obj.vod_serial|htmlspecialchars}</span>
+            </div>
+            {/notempty}
+
+            {notempty name="obj.vod_content"}
+            <div class="detail-desc" id="detailDesc" data-short="{php}echo htmlspecialchars($desc_short, ENT_QUOTES, 'UTF-8');{/php}" data-full="{php}echo htmlspecialchars($desc_text, ENT_QUOTES, 'UTF-8');{/php}">{php}echo htmlspecialchars($desc_short, ENT_QUOTES, 'UTF-8');{/php}</div>
+            {if condition="$desc_need_expand"}
+            <button class="detail-expand-btn" id="detailExpandBtn" type="button">展开</button>
+            {/if}
+            {/notempty}
+
+            <div class="detail-actions">
+                {if condition="!empty($first_play_link)"}
+                <a href="{php}echo htmlspecialchars($first_play_link, ENT_QUOTES, 'UTF-8');{/php}" class="button-primary" style="min-width:120px">立即播放</a>
+                {/if}
+                <a href="javascript:void(0);" class="button-secondary mac_ulog" data-type="2" data-mid="{$maccms.mid}" data-id="{$obj.vod_id}">收藏</a>
+                <button class="button-secondary detail-share-btn" type="button">分享</button>
+            </div>
+        </div>
+    </section>
+
+    {if condition="$has_play"}
+    <section class="play-groups">
+        <div class="section-title"><h2>播放</h2></div>
+        {if condition="$multi_group"}
+        <div class="play-group-tabs" role="tablist">
+            {php} foreach ($play_groups as $group_idx => $group): {/php}
+            <button class="play-group-tab{php}echo $group_idx === 0 ? ' active' : '';{/php}" type="button" data-sid="{php}echo intval($group['sid']);{/php}" role="tab">{php}echo htmlspecialchars($group['name']);{/php}</button>
+            {php} endforeach; {/php}
+        </div>
+        {/if}
+        {php} foreach ($play_groups as $group_idx => $group):
+            $sid = intval($group['sid']);
+            $eps = !empty($group['urls']) ? $group['urls'] : [];
+            $ep_chunks = array_chunk($eps, 50);
+        {/php}
+        <div class="episode-panel{php}echo $group_idx === 0 ? ' active' : '';{/php}" data-sid="{php}echo $sid;{/php}">
+            {php} foreach ($ep_chunks as $chunk_idx => $chunk):
+                $start_ep = $chunk_idx * 50 + 1;
+                $end_ep = min(($chunk_idx + 1) * 50, count($eps));
+                $is_first = ($chunk_idx === 0);
+            {/php}
+            {php} if (count($ep_chunks) > 1): {/php}
+            <div class="episode-chunk">
+                <div class="episode-chunk-header">第{php}echo $start_ep;{/php}-{php}echo $end_ep;{/php}集</div>
+                <div class="episode-list episode-chunk-list{php}echo $is_first ? '' : ' collapsed';{/php}">
+            {php} else: {/php}
+            <div class="episode-list">
+            {php} endif; {/php}
+            {php} foreach ($chunk as $nid_local => $ep):
+                $ep_name = !empty($ep['name']) ? $ep['name'] : ('第' . ($start_ep + $nid_local) . '集');
+                $ep_nid_abs = !empty($ep['nid']) ? intval($ep['nid']) : ($chunk_idx * 50 + $nid_local + 1);
+            {/php}
+            <a class="episode-btn" href="{php}echo mac_url_vod_play($obj, ['sid' => $sid, 'nid' => $ep_nid_abs]);{/php}">{php}echo htmlspecialchars($ep_name);{/php}</a>
+            {php} endforeach; {/php}
+            {php} if (count($ep_chunks) > 1): {/php}
+                </div>
+            </div>
+            {php} else: {/php}
+            </div>
+            {php} endif; {/php}
+            {php} endforeach; {/php}
+        </div>
+        {php} endforeach; {/php}
+    </section>
+    {/if}
+
+    {if condition="!empty($actor_arr)"}
+    <section class="cast-section">
+        <div class="section-title"><h2>演职员</h2></div>
+        <div class="cast-scroll">
+            {php} foreach ($actor_arr as $actor_name): {/php}
+            <div class="cast-item">
+                <div class="cast-avatar">{php}echo mb_substr(htmlspecialchars($actor_name), 0, 1);{/php}</div>
+                <div class="cast-name">{php}echo htmlspecialchars($actor_name);{/php}</div>
+            </div>
+            {php} endforeach; {/php}
+        </div>
+    </section>
+    {/if}
+
+    {notempty name="obj.vod_rel_vod"}
+    <section class="related-section">
+        <div class="section-title"><h2>相关推荐</h2></div>
+        <div class="grid">
+        {maccms:vod num="6" ids="'.$obj['vod_rel_vod'].'" order="desc" by="time" id="rv" key="rk"}
+        <a class="card-poster" href="{:mac_url_vod_detail($rv)}">
+            <div class="card-cover">
+                <img src="{$rv.vod_pic|mac_url_img|htmlspecialchars}" alt="{$rv.vod_name|htmlspecialchars}" loading="lazy">
+                <div class="card-play-overlay">
+                    <i class="iconfont">&#xe62b;</i>
+                </div>
+                {notempty name="rv.vod_remarks"}
+                <span class="card-badge card-badge-quality">{$rv.vod_remarks|htmlspecialchars}</span>
+                {/notempty}
+                {notempty name="rv.vod_score"}
+                <span class="card-badge card-badge-score">{$rv.vod_score|htmlspecialchars}</span>
+                {/notempty}
+                {notempty name="rv.vod_serial"}
+                <span class="card-badge card-badge-episode">{$rv.vod_serial|htmlspecialchars}</span>
+                {else/}
+                {notempty name="rv.vod_total"}
+                <span class="card-badge card-badge-episode">全{$rv.vod_total|htmlspecialchars}集</span>
+                {/notempty}
+                {/notempty}
+            </div>
+            <div class="card-title">{$rv.vod_name|htmlspecialchars}</div>
+            <div class="card-sub">{notempty name="rv.vod_actor"}{$rv.vod_actor|htmlspecialchars}{else/}{$rv.vod_area|htmlspecialchars|mac_default=''}{/notempty}</div>
+        </a>
+        {/maccms:vod}
+        </div>
+    </section>
+    {/notempty}
+
+</main>
+
+<div class="login-gate-overlay" id="loginGateOverlay" data-logged-in="{php}echo $user_logged_in ? '1' : '0';{/php}">
+    <div class="login-gate">
+        <div class="login-gate-title">登录后可收藏</div>
+        <div class="login-gate-desc">收藏影片需要先登录账号</div>
+        <div class="login-gate-actions">
+            <a href="{:mac_url('user/login')}" class="button-primary">立即登录</a>
+            <button class="button-secondary login-gate-close" type="button">取消</button>
+        </div>
+    </div>
+</div>
+
+{include file="public/foot" /}
