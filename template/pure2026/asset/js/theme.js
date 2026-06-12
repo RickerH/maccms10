@@ -200,4 +200,57 @@
     }
   }, true);
 
+  /* ============================================================
+     Play Page — Player Load Watchdog (3.2 / 3.3)
+     ============================================================ */
+  document.addEventListener('DOMContentLoaded', function() {
+    var frame = document.querySelector('.player-frame[data-player-watch]');
+    if (!frame) return;
+
+    var loadingEl = document.getElementById('playerLoading');
+    var errorEl   = document.getElementById('playerTimeoutError');
+    var pollId    = null;
+    var timeoutId = null;
+
+    function playerHasContent() {
+      // Player is ready when MacPlayer div or an iframe exists inside the frame
+      var mp = frame.querySelector('.MacPlayer');
+      if (mp) return true;
+      var ifr = frame.querySelector('iframe');
+      return !!ifr;
+    }
+
+    function stopWatching() {
+      if (pollId)    clearInterval(pollId);
+      if (timeoutId) clearTimeout(timeoutId);
+    }
+
+    function hideLoading() {
+      if (loadingEl) loadingEl.style.display = 'none';
+    }
+
+    function showError() {
+      hideLoading();
+      if (errorEl) errorEl.style.display = '';
+    }
+
+    // Poll every 600ms — hides skeleton as soon as player injects content
+    pollId = setInterval(function() {
+      if (playerHasContent()) {
+        stopWatching();
+        hideLoading();
+      }
+    }, 600);
+
+    // Hard timeout: 10s — if still no content, show error with route list
+    timeoutId = setTimeout(function() {
+      stopWatching();
+      if (playerHasContent()) {
+        hideLoading();
+      } else {
+        showError();
+      }
+    }, 10000);
+  });
+
 })();

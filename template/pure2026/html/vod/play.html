@@ -1,0 +1,313 @@
+{include file="public/head" /}
+{php}
+/* ---- 1.2 Init: parse route params and play_list ---- */
+$sid = max(1, isset($param['sid']) ? intval($param['sid']) : 1);
+$nid = max(1, isset($param['nid']) ? intval($param['nid']) : 1);
+
+$play_list = (!empty($obj['vod_play_list']) && is_array($obj['vod_play_list']))
+    ? $obj['vod_play_list'] : [];
+
+/* ---- Build play_groups (reuse detail.html pattern) ---- */
+$play_groups = [];
+$group_nid_map = [];
+$group_first_nid = [];
+foreach ($play_list as $_gsid => $_group) {
+    $_gsid = intval($_gsid);
+    $_urls = (!empty($_group['urls']) && is_array($_group['urls']))
+        ? array_values($_group['urls']) : [];
+    if (empty($_urls)) continue;
+    $_pi    = !empty($_group['player_info']) && is_array($_group['player_info'])
+        ? $_group['player_info'] : [];
+    $_gname = !empty($_pi['show']) ? $_pi['show']
+        : (!empty($_group['from']) ? $_group['from'] : ('线路' . intval($_gsid)));
+    $group_nid_map[$_gsid] = [];
+    foreach ($_urls as $_idx => $_ep) {
+        $_ep_nid = !empty($_ep['nid']) ? intval($_ep['nid']) : ($_idx + 1);
+        if ($_ep_nid < 1) continue;
+        if (empty($group_first_nid[$_gsid])) {
+            $group_first_nid[$_gsid] = $_ep_nid;
+        }
+        $group_nid_map[$_gsid][$_ep_nid] = true;
+    }
+    $play_groups[] = [
+        'sid'       => $_gsid,
+        'name'      => $_gname,
+        'urls'      => $_urls,
+        'url_count' => !empty($_group['url_count']) ? intval($_group['url_count']) : count($_urls),
+    ];
+}
+$multi_group = count($play_groups) > 1;
+
+if (!empty($play_groups)) {
+    if (empty($group_nid_map[$sid])) {
+        $sid = intval($play_groups[0]['sid']);
+    }
+    if (empty($group_nid_map[$sid][$nid])) {
+        $nid = !empty($group_first_nid[$sid]) ? intval($group_first_nid[$sid]) : 1;
+    }
+}
+
+$current_group = !empty($play_list[$sid]) ? $play_list[$sid] : [];
+$current_urls  = (!empty($current_group['urls']) && is_array($current_group['urls']))
+    ? $current_group['urls'] : [];
+
+$current_ep = !empty($current_urls[$nid]) ? $current_urls[$nid] : [];
+if (empty($current_ep)) {
+    foreach ($current_urls as $_ep) {
+        if (!empty($_ep['nid']) && intval($_ep['nid']) === $nid) {
+            $current_ep = $_ep;
+            break;
+        }
+    }
+}
+$current_ep_name = !empty($current_ep['name']) ? $current_ep['name'] : ('第' . $nid . '集');
+
+/* ---- Episode chunks for current group ---- */
+$_eps_flat         = array_values($current_urls);
+$ep_chunks         = array_chunk($_eps_flat, 50);
+$current_chunk_idx = 0;
+foreach ($_eps_flat as $_pos => $_ep) {
+    if (!empty($_ep['nid']) && intval($_ep['nid']) === $nid) {
+        $current_chunk_idx = (int)floor($_pos / 50);
+        break;
+    }
+}
+
+/* ---- 1.6 Prev / Next links ---- */
+$link_pre  = !empty($obj['player_info']['link_pre'])  ? $obj['player_info']['link_pre']  : '';
+$link_next = !empty($obj['player_info']['link_next']) ? $obj['player_info']['link_next'] : '';
+if (empty($link_pre) || empty($link_next)) {
+    foreach ($_eps_flat as $_pos2 => $_ep2) {
+        if (!empty($_ep2['nid']) && intval($_ep2['nid']) === $nid) {
+            if (empty($link_pre) && $_pos2 > 0 && !empty($_eps_flat[$_pos2 - 1]['nid'])) {
+                $link_pre = mac_url_vod_play($obj, ['sid' => $sid, 'nid' => intval($_eps_flat[$_pos2 - 1]['nid'])]);
+            }
+            if (empty($link_next) && isset($_eps_flat[$_pos2 + 1]) && !empty($_eps_flat[$_pos2 + 1]['nid'])) {
+                $link_next = mac_url_vod_play($obj, ['sid' => $sid, 'nid' => intval($_eps_flat[$_pos2 + 1]['nid'])]);
+            }
+            break;
+        }
+    }
+}
+$is_first_ep = empty($link_pre);
+$is_last_ep  = empty($link_next);
+
+/* ---- Guest history JSON (safe for inline <script>) ---- */
+$_hist_payload = [
+    'mid'  => 1,
+    'name' => $obj['vod_name'] ?? '',
+    'link' => mac_url_vod_play($obj, ['sid' => $sid, 'nid' => $nid]),
+    'pic'  => mac_url_img($obj['vod_pic'] ?? ''),
+    'part' => $current_ep_name,
+];
+$_hist_json = json_encode($_hist_payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+if ($_hist_json === false) {
+    $_hist_json = 'null';
+}
+
+/* ---- Related vods ---- */
+$has_rel_vod = !empty($obj['vod_rel_vod']);
+{/php}
+
+<main class="container play-page">
+
+    <!-- 1.3 Breadcrumb: 首页 > 分类(link) > 影片名(text-secondary, non-clickable) -->
+    <nav class="breadcrumb" aria-label="面包屑导航">
+        <a href="{$maccms.path}">首页</a>
+        <span class="breadcrumb-separator">/</span>
+        {notempty name="obj.type.type_name"}
+        <a href="{:mac_url('vod/type', ['id'=>$obj['type']['type_id']])}">{$obj.type.type_name|htmlspecialchars}</a>
+        <span class="breadcrumb-separator">/</span>
+        {/notempty}
+        <span style="color:var(--text-secondary)">{$obj.vod_name|htmlspecialchars}</span>
+    </nav>
+
+    <!-- 1.4 Player layout grid -->
+    <section class="player-layout">
+
+        <div class="player-main">
+
+            <!-- 1.4/1.5 Player shell + player or state display -->
+            <div class="player-shell">
+                <div class="player-frame" data-player-watch>
+                    <div class="player-loading skeleton" id="playerLoading"></div>
+                    {$player_data}{$player_js}
+                    <!-- Timeout error fallback — shown by JS watchdog after 10s if no player content -->
+                    <div class="player-timeout-error" id="playerTimeoutError" style="display:none">
+                        <div class="error-icon">&#9888;</div>
+                        <div class="error-title">视频加载失败，请尝试切换线路</div>
+                        {php} if ($multi_group): {/php}
+                        <div class="error-routes">
+                            {php} foreach ($play_groups as $_pg): {/php}
+                            {php}
+                                $_pg_sid2    = intval($_pg['sid']);
+                                $_tgt2       = !empty($group_nid_map[$_pg_sid2][$nid]) ? $nid : (!empty($group_first_nid[$_pg_sid2]) ? intval($group_first_nid[$_pg_sid2]) : 1);
+                                $_tab_active = ($_pg_sid2 === $sid) ? ' active' : '';
+                            {/php}
+                            <a class="play-group-tab{php}echo $_tab_active;{/php}"
+                               href="{php}echo htmlspecialchars(mac_url_vod_play($obj, ['sid' => $_pg_sid2, 'nid' => $_tgt2]), ENT_QUOTES, 'UTF-8');{/php}">{php}echo htmlspecialchars($_pg['name'], ENT_QUOTES, 'UTF-8');{/php}</a>
+                            {php} endforeach; {/php}
+                        </div>
+                        {php} endif; {/php}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1.6 Play meta: title, current episode, prev/next -->
+            <div class="play-meta">
+                <div class="play-title">{$obj.vod_name|htmlspecialchars}</div>
+                <div class="play-controls">
+                    <span class="play-current">{php}echo htmlspecialchars($current_ep_name, ENT_QUOTES, 'UTF-8');{/php}</span>
+                    <div class="play-nav">
+                        {php} if (!$is_first_ep): {/php}
+                        <a class="play-nav-btn" href="{php}echo htmlspecialchars($link_pre, ENT_QUOTES, 'UTF-8');{/php}">&#8249; 上集</a>
+                        {php} else: {/php}
+                        <span class="play-nav-btn disabled">&#8249; 上集</span>
+                        {php} endif; {/php}
+                        <a class="play-nav-btn" href="javascript:location.reload()">&#8635; 刷新</a>
+                        {php} if (!$is_last_ep): {/php}
+                        <a class="play-nav-btn" href="{php}echo htmlspecialchars($link_next, ENT_QUOTES, 'UTF-8');{/php}">下集 &#8250;</a>
+                        {php} else: {/php}
+                        <span class="play-nav-btn disabled">下集 &#8250;</span>
+                        {php} endif; {/php}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1.7 Route tabs (only when >1 group) -->
+            {php} if ($multi_group): {/php}
+            <div class="play-groups">
+                <div class="play-group-tabs" role="tablist">
+                    {php} foreach ($play_groups as $_pg): {/php}
+                    {php}
+                        $_pg_sid    = intval($_pg['sid']);
+                        $_is_active = ($_pg_sid === $sid);
+                        $_tgt_nid   = !empty($group_nid_map[$_pg_sid][$nid]) ? $nid : (!empty($group_first_nid[$_pg_sid]) ? intval($group_first_nid[$_pg_sid]) : 1);
+                    {/php}
+                    {php} if ($_is_active): {/php}
+                    <span class="play-group-tab active" role="tab" aria-selected="true">{php}echo htmlspecialchars($_pg['name'], ENT_QUOTES, 'UTF-8');{/php}</span>
+                    {php} else: {/php}
+                    <a class="play-group-tab" role="tab" aria-selected="false"
+                       href="{php}echo htmlspecialchars(mac_url_vod_play($obj, ['sid' => $_pg_sid, 'nid' => $_tgt_nid]), ENT_QUOTES, 'UTF-8');{/php}">{php}echo htmlspecialchars($_pg['name'], ENT_QUOTES, 'UTF-8');{/php}</a>
+                    {php} endif; {/php}
+                    {php} endforeach; {/php}
+                </div>
+            </div>
+            {php} endif; {/php}
+
+            <!-- 1.8 Episode list with 50-ep chunk grouping -->
+            {php} if (!empty($ep_chunks)): {/php}
+            <div class="play-episodes">
+                {php} foreach ($ep_chunks as $_ci => $_chunk): {/php}
+                {php}
+                    $_chunk_start      = $_ci * 50 + 1;
+                    $_chunk_end        = min(($_ci + 1) * 50, count($_eps_flat));
+                    $_is_current_chunk = ($_ci === $current_chunk_idx);
+                    $_multi_chunks     = count($ep_chunks) > 1;
+                {/php}
+                {php} if ($_multi_chunks): {/php}
+                <div class="episode-chunk">
+                    <div class="episode-chunk-header">第{php}echo $_chunk_start;{/php}-{php}echo $_chunk_end;{/php}集</div>
+                    <div class="episode-list episode-chunk-list{php}echo $_is_current_chunk ? '' : ' collapsed';{/php}">
+                {php} else: {/php}
+                <div class="episode-list">
+                {php} endif; {/php}
+                    {php} foreach ($_chunk as $_ei => $_ep): {/php}
+                    {php}
+                        $_ep_nid       = !empty($_ep['nid']) ? intval($_ep['nid']) : ($_ci * 50 + $_ei + 1);
+                        $_ep_name      = !empty($_ep['name']) ? $_ep['name'] : ('第' . $_ep_nid . '集');
+                        $_is_active_ep = ($_ep_nid === $nid);
+                    {/php}
+                    <a class="episode-btn{php}echo $_is_active_ep ? ' active' : '';{/php}"
+                       href="{php}echo htmlspecialchars(mac_url_vod_play($obj, ['sid' => $sid, 'nid' => $_ep_nid]), ENT_QUOTES, 'UTF-8');{/php}">{php}echo htmlspecialchars($_ep_name, ENT_QUOTES, 'UTF-8');{/php}</a>
+                    {php} endforeach; {/php}
+                {php} if ($_multi_chunks): {/php}
+                    </div>
+                </div>
+                {php} else: {/php}
+                </div>
+                {php} endif; {/php}
+                {php} endforeach; {/php}
+            </div>
+            {php} endif; {/php}
+
+        </div><!-- /.player-main -->
+
+        <!-- 1.9 Recommendations: PC sidebar (320px) + WAP grid below episodes -->
+        <aside class="play-sidebar">
+            {php} if ($has_rel_vod): {/php}
+            <div class="sidebar-title">相关推荐</div>
+            <div class="sidebar-cards grid">
+            {maccms:vod num="12" ids="'.$obj['vod_rel_vod'].'" order="desc" by="time" id="rv" key="rk"}
+            <a class="card-poster" href="{:mac_url_vod_detail($rv)}">
+                <div class="card-cover">
+                    <img src="{$rv.vod_pic|mac_url_img|htmlspecialchars}" alt="{$rv.vod_name|htmlspecialchars}" loading="lazy">
+                    {notempty name="rv.vod_remarks"}
+                    <span class="card-badge card-badge-quality">{$rv.vod_remarks|htmlspecialchars}</span>
+                    {/notempty}
+                    {notempty name="rv.vod_serial"}
+                    <span class="card-badge card-badge-episode">{$rv.vod_serial|htmlspecialchars}</span>
+                    {else/}
+                    {notempty name="rv.vod_total"}
+                    <span class="card-badge card-badge-episode">全{$rv.vod_total|htmlspecialchars}集</span>
+                    {/notempty}
+                    {/notempty}
+                </div>
+                <div class="card-title">{$rv.vod_name|htmlspecialchars}</div>
+            </a>
+            {/maccms:vod}
+            </div>
+            {php} else: {/php}
+            <div class="sidebar-title">猜你喜欢</div>
+            <div class="sidebar-cards grid">
+            {maccms:vod num="12" type="current" order="desc" by="time" id="rv" key="rk"}
+            <a class="card-poster" href="{:mac_url_vod_detail($rv)}">
+                <div class="card-cover">
+                    <img src="{$rv.vod_pic|mac_url_img|htmlspecialchars}" alt="{$rv.vod_name|htmlspecialchars}" loading="lazy">
+                    {notempty name="rv.vod_remarks"}
+                    <span class="card-badge card-badge-quality">{$rv.vod_remarks|htmlspecialchars}</span>
+                    {/notempty}
+                    {notempty name="rv.vod_serial"}
+                    <span class="card-badge card-badge-episode">{$rv.vod_serial|htmlspecialchars}</span>
+                    {else/}
+                    {notempty name="rv.vod_total"}
+                    <span class="card-badge card-badge-episode">全{$rv.vod_total|htmlspecialchars}集</span>
+                    {/notempty}
+                    {/notempty}
+                </div>
+                <div class="card-title">{$rv.vod_name|htmlspecialchars}</div>
+            </a>
+            {/maccms:vod}
+            </div>
+            {php} endif; {/php}
+        </aside>
+
+    </section><!-- /.player-layout -->
+
+    <!-- 1.10 CMS tracking nodes (hidden) -->
+    <span style="display:none" class="mac_hits hits"
+          data-mid="{$maccms.mid}" data-id="{$obj.vod_id}" data-type="hits"></span>
+    <span style="display:none" class="mac_ulog_set"
+          data-type="4" data-mid="{$maccms.mid}" data-id="{$obj.vod_id}"
+          data-sid="{php}echo intval($sid);{/php}" data-nid="{php}echo intval($nid);{/php}"></span>
+
+</main>
+
+<script>
+/* Guest local play history — max 60 entries, independent of CMS login history */
+(function() {
+    try {
+        var key  = 'guest_play_history';
+        var item = {php}echo $_hist_json;{/php};
+        if (!item) return;
+        var list = JSON.parse(window.localStorage.getItem(key) || '[]');
+        if (!Array.isArray(list)) list = [];
+        list = list.filter(function(v) { return v && v.link && v.link !== item.link; });
+        list.unshift(item);
+        if (list.length > 60) list = list.slice(0, 60);
+        window.localStorage.setItem(key, JSON.stringify(list));
+    } catch (ex) {}
+})();
+</script>
+
+{include file="public/foot" /}

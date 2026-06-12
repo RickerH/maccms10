@@ -139,4 +139,30 @@ return array (
     'tip' => '自动配置',
     'id' => 'lzm3u8',
   ),
+  'feifan' => 
+  array (
+    'status' => '1',
+    'from' => 'feifan',
+    'show' => 'feifan播放器',
+    'des' => '自动添加',
+    'target' => '_self',
+    'ps' => '0',
+    'parse' => '',
+    'sort' => '800',
+    'tip' => '自动配置',
+    'id' => 'feifan',
+  ),
+  'ffm3u8' => 
+  array (
+    'status' => '1',
+    'from' => 'ffm3u8',
+    'show' => 'ffm3u8播放器',
+    'des' => '自动添加',
+    'target' => '_self',
+    'ps' => '0',
+    'parse' => '',
+    'sort' => '800',
+    'tip' => '自动配置',
+    'id' => 'ffm3u8',
+  ),
 );
