@@ -1,0 +1,108 @@
+{include file="public/head" /}
+
+<main class="container user-page">
+  <div class="user-info-wrap">
+    <h1 class="user-info-title">修改资料</h1>
+
+    <form id="fm-info" class="user-info-form" method="post" action="{:url('user/info')}">
+      <div class="user-info-section">
+        <h2 class="user-info-section-title">基本信息</h2>
+
+        <div class="auth-field">
+          <label class="auth-label" for="user_nick_name">昵称</label>
+          <input class="auth-input" type="text" id="user_nick_name" name="user_nick_name"
+                 placeholder="设置您的昵称"
+                 value="{$obj.user_nick_name|default=''}" maxlength="20">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label" for="user_qq">QQ / 联系方式</label>
+          <input class="auth-input" type="text" id="user_qq" name="user_qq"
+                 placeholder="QQ 号码或其他联系方式"
+                 value="{$obj.user_qq|default=''}" maxlength="30">
+        </div>
+      </div>
+
+      <div class="user-info-section">
+        <h2 class="user-info-section-title">密保设置</h2>
+        <div class="auth-field">
+          <label class="auth-label" for="user_question">密保问题</label>
+          <input class="auth-input" type="text" id="user_question" name="user_question"
+                 placeholder="设置密保问题"
+                 value="{$obj.user_question|default=''}" maxlength="50">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label" for="user_answer">密保答案</label>
+          <input class="auth-input" type="text" id="user_answer" name="user_answer"
+                 placeholder="设置密保答案"
+                 value="{$obj.user_answer|default=''}" maxlength="50">
+        </div>
+      </div>
+
+      <div class="user-info-section">
+        <h2 class="user-info-section-title">
+          <button type="button" class="user-pwd-toggle" id="pwd_toggle" aria-expanded="false">
+            修改密码
+            <svg class="user-pwd-toggle-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+        </h2>
+        <div id="pwd_fields" class="user-pwd-fields" hidden>
+          <div class="auth-field">
+            <label class="auth-label" for="user_pwd">当前密码</label>
+            <input class="auth-input" type="password" id="user_pwd" name="user_pwd"
+                   placeholder="输入当前密码" autocomplete="current-password">
+          </div>
+          <div class="auth-field">
+            <label class="auth-label" for="user_pwd1">新密码</label>
+            <input class="auth-input" type="password" id="user_pwd1" name="user_pwd1"
+                   placeholder="输入新密码" autocomplete="new-password">
+          </div>
+          <div class="auth-field">
+            <label class="auth-label" for="user_pwd2">确认新密码</label>
+            <input class="auth-input" type="password" id="user_pwd2" name="user_pwd2"
+                   placeholder="再次输入新密码" autocomplete="new-password">
+          </div>
+        </div>
+      </div>
+
+      <button class="auth-submit button-primary" type="submit">保存修改</button>
+    </form>
+
+    <p class="user-back-link"><a href="{:mac_url('user/index')}">← 返回个人中心</a></p>
+  </div>
+</main>
+
+<script>
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggle    = document.getElementById('pwd_toggle');
+    var pwdFields = document.getElementById('pwd_fields');
+    var form      = document.getElementById('fm-info');
+
+    if (toggle && pwdFields) {
+      toggle.addEventListener('click', function() {
+        var expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        pwdFields.hidden = expanded;
+        toggle.querySelector('.user-pwd-toggle-chev').style.transform = expanded ? '' : 'rotate(180deg)';
+      });
+    }
+
+    /* 密码修改前端验证 */
+    form.addEventListener('submit', function(e) {
+      var pwd1El = document.getElementById('user_pwd1');
+      var pwd2El = document.getElementById('user_pwd2');
+      if (!pwdFields.hidden && pwd1El && pwd2El) {
+        if (pwd1El.value && pwd2El.value && pwd1El.value !== pwd2El.value) {
+          e.preventDefault();
+          alert('两次输入的新密码不一致，请重新输入。');
+          pwd2El.focus();
+        }
+      }
+    });
+  });
+})();
+</script>
+
+{include file="public/foot" /}

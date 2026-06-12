@@ -1,0 +1,121 @@
+{include file="public/head" /}
+
+<main class="auth-wrap">
+  <div class="auth-card">
+    <h1 class="auth-card-title">{$maccms.site_name|mac_default='登录'}</h1>
+    <p class="auth-card-sub">登录您的账号</p>
+
+    <form id="fm-login" class="auth-form" autocomplete="off" novalidate>
+      <div class="auth-field">
+        <label class="auth-label" for="user_name">账号</label>
+        <input class="auth-input" type="text" id="user_name" name="user_name"
+               placeholder="输入您的登录账号" autocomplete="username">
+      </div>
+      <div class="auth-field">
+        <label class="auth-label" for="user_pwd">密码</label>
+        <input class="auth-input" type="password" id="user_pwd" name="user_pwd"
+               placeholder="输入您的登录密码" autocomplete="current-password">
+      </div>
+      {if condition="$GLOBALS['config']['user']['login_verify'] eq 1"}
+      <div class="auth-field">
+        <label class="auth-label" for="verify">验证码</label>
+        <div class="auth-captcha-row">
+          <input class="auth-input auth-captcha-input" type="text" id="verify" name="verify"
+                 placeholder="请输入验证码" autocomplete="off">
+          <img class="auth-captcha-img" id="verify_img"
+               src="{:url('verify/index')}"
+               onclick="this.src=this.src+'?'" alt="点击刷新验证码" title="点击刷新">
+        </div>
+      </div>
+      {/if}
+      <div class="auth-remember-row">
+        <label class="auth-remember">
+          <input type="checkbox" name="remember" value="1"> 记住我
+        </label>
+        <a class="auth-forgot" href="{:mac_url('user/findpass')}">忘记密码？</a>
+      </div>
+      <p class="auth-error" id="login_error" aria-live="polite"></p>
+      <button class="auth-submit button-primary" id="btn_login" type="button">立即登录</button>
+    </form>
+
+    <p class="auth-switch">还没有账号？<a href="{:mac_url('user/reg')}">立即注册</a></p>
+  </div>
+</main>
+
+<script>
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    var form    = document.getElementById('fm-login');
+    var btn     = document.getElementById('btn_login');
+    var errEl   = document.getElementById('login_error');
+    var verImg  = document.getElementById('verify_img');
+
+    function showError(msg) {
+      errEl.textContent = msg;
+      errEl.style.display = 'block';
+    }
+    function clearError() {
+      errEl.style.display = 'none';
+      errEl.textContent = '';
+    }
+
+    form.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { btn.click(); }
+    });
+
+    btn.addEventListener('click', function() {
+      clearError();
+      var nameVal = form.querySelector('#user_name').value.replace(/^\s+|\s+$/g, '');
+      var pwdVal  = form.querySelector('#user_pwd').value;
+      var verEl   = form.querySelector('#verify');
+
+      if (!nameVal) { showError('请输入账号'); form.querySelector('#user_name').focus(); return; }
+      if (!pwdVal)  { showError('请输入密码'); form.querySelector('#user_pwd').focus(); return; }
+      if (verEl && !verEl.value.replace(/^\s+|\s+$/g, '')) {
+        showError('请输入验证码'); verEl.focus(); return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '登录中…';
+
+      var data = [];
+      var fields = form.querySelectorAll('input[name]');
+      for (var i = 0; i < fields.length; i++) {
+        if (fields[i].type === 'checkbox') {
+          if (fields[i].checked) data.push(encodeURIComponent(fields[i].name) + '=' + encodeURIComponent(fields[i].value));
+        } else {
+          data.push(encodeURIComponent(fields[i].name) + '=' + encodeURIComponent(fields[i].value));
+        }
+      }
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '{:url("user/login")}', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.onload = function() {
+        btn.disabled = false;
+        btn.textContent = '立即登录';
+        try {
+          var r = JSON.parse(xhr.responseText);
+          if (r.code === 1) {
+            location.href = '{:url("user/index")}';
+          } else {
+            showError(r.msg || '账号或密码错误');
+            if (verImg) { verImg.src = verImg.src.split('?')[0] + '?' + Date.now(); }
+          }
+        } catch (e) {
+          showError('网络异常，请稍后再试');
+        }
+      };
+      xhr.onerror = function() {
+        btn.disabled = false;
+        btn.textContent = '立即登录';
+        showError('网络异常，请稍后再试');
+      };
+      xhr.send(data.join('&'));
+    });
+  });
+})();
+</script>
+
+{include file="public/foot" /}

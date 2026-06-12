@@ -297,6 +297,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   gap: var(--space-1);
   flex: 1;
+  min-width: 0;
 }
 
 .nav-link {
@@ -341,6 +342,85 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-search input::placeholder {
   color: var(--text-muted);
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.nav-auth-link,
+.nav-user-link {
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: color 150ms, background-color 150ms, border-color 150ms;
+}
+
+.nav-auth-link {
+  padding: 0 var(--space-3);
+}
+
+.nav-auth-link:hover,
+.nav-user-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.nav-auth-link--primary {
+  background: var(--accent);
+  color: #fff;
+  padding: 0 var(--space-4);
+}
+
+.nav-auth-link--primary:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+.nav-user-link {
+  gap: var(--space-2);
+  max-width: 150px;
+  padding: 0 var(--space-3);
+}
+
+.nav-user-link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.nav-user-link span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 820px) and (max-width: 1080px) {
+  .nav-search input {
+    width: 150px;
+  }
+
+  .nav-logo {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-link {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
 }
 
 .theme-toggle {
@@ -1858,3 +1938,494 @@ h1, h2, h3, h4, h5, h6 {
 /* ============================================================
    8. RESPONSIVE        ← 逐步补充
    ============================================================ */
+
+/* ============================================================
+   9. PAGES — Auth & User Center  (Story 5.1)
+   ============================================================ */
+
+/* ---- Auth 页面通用容器 ---- */
+.auth-wrap {
+  min-height: calc(100vh - var(--nav-height) - var(--mobile-nav-height) - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--gutter-wap);
+}
+
+@media (min-width: 820px) {
+  .auth-wrap {
+    padding: var(--space-10) var(--gutter-pc);
+  }
+}
+
+/* ---- Auth 卡片 ---- */
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6);
+}
+
+@media (min-width: 820px) {
+  .auth-card {
+    padding: var(--space-10) var(--space-8);
+  }
+}
+
+.auth-card-title {
+  font-size: var(--font-heading-size);
+  font-weight: var(--font-heading-weight);
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.auth-card-sub {
+  font-size: var(--font-body-size);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+/* ---- Auth 表单字段 ---- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.auth-label {
+  font-size: var(--font-caption-size);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.auth-optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.auth-input {
+  height: 44px;
+  padding: 0 var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-body-size);
+  width: 100%;
+  transition: border-color 150ms;
+}
+
+.auth-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: var(--accent);
+}
+
+.auth-input::placeholder {
+  color: var(--text-muted);
+}
+
+.auth-input.error {
+  border-color: var(--accent);
+}
+
+/* ---- 验证码行（输入框 + 图片/按钮并排） ---- */
+.auth-captcha-row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.auth-captcha-input {
+  flex: 1;
+}
+
+.auth-captcha-img {
+  height: 44px;
+  width: auto;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* ---- 发送验证码按钮 ---- */
+.auth-send-code {
+  height: 44px;
+  padding: 0 var(--space-4);
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-caption-size);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 150ms;
+}
+
+.auth-send-code:hover:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.auth-send-code:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- 记住我 / 忘记密码 行 ---- */
+.auth-remember-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-caption-size);
+  color: var(--text-secondary);
+}
+
+.auth-remember {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.auth-forgot {
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity 150ms;
+}
+
+.auth-forgot:hover {
+  opacity: 0.8;
+}
+
+/* ---- 错误提示 ---- */
+.auth-error {
+  font-size: var(--font-caption-size);
+  color: var(--accent);
+  display: none;
+  margin: 0;
+}
+
+/* ---- 提交按钮 ---- */
+.auth-submit {
+  width: 100%;
+  height: 48px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-2);
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---- 切换链接（登录/注册互跳） ---- */
+.auth-switch {
+  margin-top: var(--space-5);
+  font-size: var(--font-caption-size);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.auth-switch a {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ---- 用户页面通用容器 ---- */
+.user-page {
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-8);
+}
+
+/* ---- 个人中心仪表盘 ---- */
+.user-dashboard {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.user-hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+}
+
+.user-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-avatar svg {
+  width: 32px;
+  height: 32px;
+}
+
+.user-hero-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-display-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: var(--space-1);
+}
+
+.user-meta {
+  font-size: var(--font-caption-size);
+  color: var(--text-muted);
+}
+
+.user-group-badge {
+  display: inline-block;
+  margin-top: var(--space-2);
+  padding: 2px var(--space-2);
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: var(--radius-full);
+  font-size: var(--font-label-size);
+  font-weight: 500;
+}
+
+/* ---- 快捷入口 ---- */
+.user-quick-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 480px) {
+  .user-quick-links {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.user-quick-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-3);
+  font-size: var(--font-caption-size);
+  color: var(--text-secondary);
+  text-align: center;
+  min-height: 44px;
+  transition: background-color 150ms, border-color 150ms, color 150ms;
+}
+
+.user-quick-link:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-light);
+  color: var(--text-primary);
+}
+
+.user-ql-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* ---- 用户页面 section ---- */
+.user-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.user-logout-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-caption-size);
+  color: var(--text-muted);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: color 150ms, background-color 150ms;
+}
+
+.user-logout-link:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ---- 资料页 ---- */
+.user-info-wrap {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.user-info-title {
+  font-size: var(--font-heading-size);
+  font-weight: var(--font-heading-weight);
+  color: var(--text-primary);
+  margin-bottom: var(--space-6);
+}
+
+.user-info-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.user-info-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.user-info-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+/* ---- 密码折叠切换 ---- */
+.user-pwd-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  transition: color 150ms;
+}
+
+.user-pwd-toggle:hover {
+  color: var(--accent);
+}
+
+.user-pwd-toggle-chev {
+  margin-left: auto;
+  transition: transform 200ms;
+}
+
+.user-pwd-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+/* ---- 返回链接 ---- */
+.user-back-link {
+  margin-top: var(--space-5);
+  font-size: var(--font-caption-size);
+  color: var(--text-muted);
+}
+
+.user-back-link a {
+  color: var(--text-secondary);
+  transition: color 150ms;
+}
+
+.user-back-link a:hover {
+  color: var(--accent);
+}
+
+/* ---- 签到页 ---- */
+.user-checkin-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.user-checkin-title {
+  font-size: var(--font-heading-size);
+  font-weight: var(--font-heading-weight);
+  color: var(--text-primary);
+  margin-bottom: var(--space-6);
+}
+
+.user-checkin-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  align-items: center;
+  text-align: center;
+}
+
+.user-checkin-streak {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-body-size);
+  color: var(--text-secondary);
+}
+
+.user-checkin-streak strong {
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.user-checkin-hint {
+  font-size: var(--font-caption-size);
+  color: var(--text-muted);
+}
+
+.user-checkin-cta .button-primary {
+  padding: 12px var(--space-10);
+  font-size: 15px;
+}
+
+.user-checkin-msg {
+  font-size: var(--font-caption-size);
+  color: var(--text-secondary);
+  min-height: 1.4em;
+}

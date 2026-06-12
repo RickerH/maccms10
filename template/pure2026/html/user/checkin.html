@@ -1,0 +1,159 @@
+{include file="public/head" /}
+
+<main class="container user-page">
+  {if condition="isset($obj) and !empty($obj['user_id'])"}
+
+  <!-- 已登录：签到面板 -->
+  <div class="user-checkin-wrap"
+       id="mac-checkin-root"
+       data-url-get-sign-info="{:rtrim($maccms.path,'/').'/api.php/Task/get_sign_info'}"
+       data-url-daily-sign="{:rtrim($maccms.path,'/').'/api.php/Task/daily_sign'}"
+       data-url-login="{:mac_url('user/login')}">
+
+    <h1 class="user-checkin-title">每日签到</h1>
+
+    <div class="user-checkin-card">
+      <div class="user-checkin-streak">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <span>已连续签到 <strong id="checkin-serial">0</strong> 天</span>
+      </div>
+
+      <p class="user-checkin-hint" id="checkin-hint">加载中…</p>
+
+      <div class="user-checkin-cta" id="checkin-cta">
+        <button class="button-primary" id="btn-checkin" type="button" disabled>签到中…</button>
+      </div>
+
+      <p class="user-checkin-msg" id="checkin-msg" aria-live="polite"></p>
+    </div>
+
+    <div class="user-section">
+      <a class="user-back-link" href="{:mac_url('user/index')}">← 返回个人中心</a>
+    </div>
+  </div>
+
+  {else/}
+
+  <!-- 未登录：登录引导 -->
+  <div class="empty-state">
+    <div class="empty-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="56" height="56">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+        <polyline points="9 16 11 18 15 14"/>
+      </svg>
+    </div>
+    <p class="empty-title">登录后签到</p>
+    <p class="empty-desc">每日签到可获得积分奖励，登录后即可参与。</p>
+    <div class="empty-actions">
+      <a class="button-primary" href="{:mac_url('user/login')}">立即登录</a>
+    </div>
+  </div>
+
+  {/if}
+</main>
+
+<script>
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    var root = document.getElementById('mac-checkin-root');
+    if (!root) return;
+
+    var urlGetInfo  = root.getAttribute('data-url-get-sign-info');
+    var urlDailySign = root.getAttribute('data-url-daily-sign');
+    var serialEl    = document.getElementById('checkin-serial');
+    var hintEl      = document.getElementById('checkin-hint');
+    var msgEl       = document.getElementById('checkin-msg');
+    var btn         = document.getElementById('btn-checkin');
+
+    function setMsg(text, isErr) {
+      msgEl.textContent = text;
+      msgEl.style.color = isErr ? 'var(--accent)' : 'var(--text-secondary)';
+    }
+
+    function loadSignInfo() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', urlGetInfo, true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.onload = function() {
+        try {
+          var r = JSON.parse(xhr.responseText);
+          if (r.code === 1 && r.info) {
+            var serial = parseInt(r.info.sign_serial || r.info.serial || 0, 10);
+            serialEl.textContent = serial;
+            var signed = r.info.today_signed == 1 || r.info.today_sign == 1;
+            if (signed) {
+              btn.textContent = '今日已签到';
+              btn.disabled = true;
+              hintEl.textContent = '明天再来签到，保持连续签到可获得更多奖励。';
+            } else {
+              btn.textContent = '立即签到';
+              btn.disabled = false;
+              hintEl.textContent = '点击下方按钮完成今日签到。';
+            }
+          } else {
+            hintEl.textContent = '签到信息加载失败，请刷新页面重试。';
+            btn.textContent = '立即签到';
+            btn.disabled = false;
+          }
+        } catch (e) {
+          hintEl.textContent = '签到信息加载失败，请刷新页面重试。';
+          btn.textContent = '立即签到';
+          btn.disabled = false;
+        }
+      };
+      xhr.onerror = function() {
+        hintEl.textContent = '网络异常，请稍后再试。';
+        btn.disabled = false;
+      };
+      xhr.send();
+    }
+
+    if (btn) {
+      btn.addEventListener('click', function() {
+        btn.disabled = true;
+        btn.textContent = '签到中…';
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', urlDailySign, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.onload = function() {
+          try {
+            var r = JSON.parse(xhr.responseText);
+            if (r.code === 1) {
+              btn.textContent = '今日已签到';
+              setMsg(r.msg || '签到成功！', false);
+              loadSignInfo();
+            } else {
+              btn.disabled = false;
+              btn.textContent = '立即签到';
+              setMsg(r.msg || '签到失败，请稍后再试。', true);
+            }
+          } catch (e) {
+            btn.disabled = false;
+            btn.textContent = '立即签到';
+            setMsg('网络异常，请稍后再试。', true);
+          }
+        };
+        xhr.onerror = function() {
+          btn.disabled = false;
+          btn.textContent = '立即签到';
+          setMsg('网络异常，请稍后再试。', true);
+        };
+        xhr.send();
+      });
+    }
+
+    loadSignInfo();
+  });
+})();
+</script>
+
+{include file="public/foot" /}
