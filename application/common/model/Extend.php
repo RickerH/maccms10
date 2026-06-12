@@ -106,6 +106,9 @@ class Extend extends Base {
 
     public function areaData($lp)
     {
+        if (!is_array($lp)) {
+            $lp = json_decode($lp, true);
+        }
         $order = $lp['order'];
         $start = abs(intval($lp['start']));
         $num = abs(intval($lp['num']));
@@ -150,6 +153,9 @@ class Extend extends Base {
 
     public function langData($lp)
     {
+        if (!is_array($lp)) {
+            $lp = json_decode($lp, true);
+        }
         $order = $lp['order'];
         $start = abs(intval($lp['start']));
         $num = abs(intval($lp['num']));
@@ -193,6 +199,9 @@ class Extend extends Base {
 
     public function classData($lp)
     {
+        if (!is_array($lp)) {
+            $lp = json_decode($lp, true);
+        }
         $order = $lp['order'];
         $start = abs(intval($lp['start']));
         $num = abs(intval($lp['num']));
@@ -236,6 +245,9 @@ class Extend extends Base {
 
     public function yearData($lp)
     {
+        if (!is_array($lp)) {
+            $lp = json_decode($lp, true);
+        }
         $order = $lp['order'];
         $start = abs(intval($lp['start']));
         $num = abs(intval($lp['num']));
@@ -279,6 +291,9 @@ class Extend extends Base {
 
     public function versionData($lp)
     {
+        if (!is_array($lp)) {
+            $lp = json_decode($lp, true);
+        }
         $order = $lp['order'];
         $start = abs(intval($lp['start']));
         $num = abs(intval($lp['num']));
@@ -323,6 +338,9 @@ class Extend extends Base {
 
     public function stateData($lp)
     {
+        if (!is_array($lp)) {
+            $lp = json_decode($lp, true);
+        }
         $order = $lp['order'];
         $start = abs(intval($lp['start']));
         $num = abs(intval($lp['num']));
@@ -370,6 +388,9 @@ class Extend extends Base {
 
     public function letterData($lp)
     {
+        if (!is_array($lp)) {
+            $lp = json_decode($lp, true);
+        }
         $data_str = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0-9';
         $tmp = explode(',',$data_str);
 

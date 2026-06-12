@@ -1,8 +1,10 @@
 {include file="public/head" /}
 {php}
 $type_id = isset($obj['type_id']) ? intval($obj['type_id']) : (isset($param['id']) ? intval($param['id']) : 0);
+$type_pid = isset($obj['type_pid']) ? intval($obj['type_pid']) : 0;
 $type_name = isset($obj['type_name']) && $obj['type_name'] !== '' ? $obj['type_name'] : '视频分类';
 $type_by = isset($param['by']) && in_array($param['by'], ['time', 'hits', 'score']) ? $param['by'] : 'time';
+$_filter_parent = $type_pid > 0 ? $type_pid : $type_id;
 $list_has = false;
 {/php}
 <main class="container list-page">
@@ -17,6 +19,36 @@ $list_has = false;
             <p class="list-kicker">Category</p>
             <h1 class="list-title">{$type_name}</h1>
             <p class="list-desc">按分类浏览影片，支持最新、最热和评分排序。</p>
+        </div>
+    </section>
+
+    <section class="filter-bar" aria-label="视频分类筛选">
+        <div class="filter-group">
+            <div class="filter-label">分类</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill{if condition="$type_pid === 0"} active{/if}" href="{:mac_url('vod/type',['id'=>$_filter_parent])}">全部</a>
+                {maccms:type parent="'.$_filter_parent.'" order="asc" by="sort" id="ftv"}
+                <a class="quick-nav-pill{if condition="$ftv.type_id eq $type_id"} active{/if}" href="{:mac_url('vod/type',['id'=>$ftv.type_id])}">{$ftv.type_name|htmlspecialchars}</a>
+                {/maccms:type}
+            </div>
+        </div>
+        <div class="filter-group">
+            <div class="filter-label">地区</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill active" href="{:mac_url('vod/show',['id'=>$type_id])}">全部</a>
+                {maccms:area order="asc" num="15" id="fta"}
+                <a class="quick-nav-pill" href="{:mac_url('vod/show',['id'=>$type_id,'area'=>$fta.area_name])}">{$fta.area_name|htmlspecialchars}</a>
+                {/maccms:area}
+            </div>
+        </div>
+        <div class="filter-group">
+            <div class="filter-label">年份</div>
+            <div class="filter-options">
+                <a class="quick-nav-pill active" href="{:mac_url('vod/show',['id'=>$type_id])}">全部</a>
+                {maccms:year order="desc" num="15" id="fty"}
+                <a class="quick-nav-pill" href="{:mac_url('vod/show',['id'=>$type_id,'year'=>$fty.year_name])}">{$fty.year_name|htmlspecialchars}</a>
+                {/maccms:year}
+            </div>
         </div>
     </section>
 
